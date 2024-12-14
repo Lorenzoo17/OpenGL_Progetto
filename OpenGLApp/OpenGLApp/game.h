@@ -23,6 +23,7 @@ public:
 
 private:
 	void UpdateRenderData();
+	void DoCollisions();
 };
 
 #endif // !GAME_H

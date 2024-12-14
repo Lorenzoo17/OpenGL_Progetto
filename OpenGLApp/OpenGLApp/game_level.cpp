@@ -28,14 +28,16 @@ void GameLevel::Load(std::vector<GameObject*> w) {
 void GameLevel::Draw(RenderData renderData) {
 	if (this->walls.size() > 0) {
 		for (GameObject*& w : this->walls) {
-			w->Draw(renderData); // Si richiama direttamente il metodo draw dei gameobject
+			//w->Draw(renderData); // Si richiama direttamente il metodo draw dei gameobject
 		}
+		this->Wall_3d->Draw(renderData);
 	}
 
 	if (this->floor.size() > 0) {
 		for (GameObject*& tale : this->floor) {
-			tale->Draw(renderData);
+			//tale->Draw(renderData);
 		}
+		this->Floor_3d->Draw(renderData);
 	}
 
 	if (this->toilets.size() > 0) {
@@ -56,6 +58,16 @@ void GameLevel::init() {
 	float unit_height = 1.0f;
 
 	glm::vec3 offset = glm::vec3(-3.0f, -12.0f, 0.0f);
+
+	// pavimento 3d
+
+	Floor_3d = new GameObject(glm::vec3(2.0f, -7.0f, -1.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("floor"));
+	Floor_3d->SetShader(ResourceManager::GetShader("3d_mult_light"));
+	Floor_3d->Rotation = glm::radians(90.0f);
+
+	Wall_3d = new GameObject(glm::vec3(2.0f, -8.0f, -2.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("wall"));
+	Wall_3d->SetShader(ResourceManager::GetShader("3d_mult_light"));
+	Wall_3d->Rotation = glm::radians(90.0f);
 
 	// Generazione pareti e pavimento
 
@@ -94,13 +106,16 @@ void GameLevel::init() {
 		glm::vec3 size = glm::vec3(wc_unit_width, wc_unit_height, 1.0f);
 
 		// wc 2d
-		GameObject wc(position, size, ResourceManager::GetTexture("wc")); // creo gameobject wc
-		//wc 3d
-		//GameObject wc(position, glm::vec3(1.0f), ResourceManager::GetModel("wc"));
+		//GameObject wc(position, size, ResourceManager::GetTexture("wc")); // creo gameobject wc
+		//wc.Rotation = glm::radians(90.0f);
+		//wc.SetShader(ResourceManager::GetShader("base"));
+		
+		// wc 3d
+		glm::vec3 wc_3d_pos(position.x - 1.0f, position.y, 2.0f);
+		GameObject wc(wc_3d_pos, glm::vec3(1.0f), ResourceManager::GetModel("wc"));
+		wc.Rotation = glm::radians(0.0f);
+		wc.SetShader(ResourceManager::GetShader("3d_mult_light"));
 
-		wc.Rotation = glm::radians(90.0f);
-		wc.SetShader(ResourceManager::GetShader("base"));
-		//wc.SetShader(ResourceManager::GetShader("3d_mult_light"));
 		this->toilets.push_back(Wc(wc)); // creo istanza Wc e li assegno il gameobject e lo metto nella lista di wc
 	}
 

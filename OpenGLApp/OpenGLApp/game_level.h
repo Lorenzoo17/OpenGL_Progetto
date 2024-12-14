@@ -13,6 +13,8 @@ public:
 	std::vector<GameObject*> floor = std::vector<GameObject*>();
 	std::vector<Wc> toilets = std::vector<Wc>();
 	std::vector<GameObject> lights = std::vector<GameObject>(); // Vettore delle luci
+	GameObject* Floor_3d;
+	GameObject* Wall_3d;
 
 	GameLevel(); // costruttore
 	void Draw(RenderData renderData);

@@ -47,6 +47,8 @@ void Game::Init(){
 	ResourceManager::LoadModel("assets/models/robot/robot_1.obj", "robot1");
 	ResourceManager::LoadModel("assets/models/slime/slime.obj", "slime1");
 	ResourceManager::LoadModel("assets/models/wc/Gabinetto.obj", "wc");
+	ResourceManager::LoadModel("assets/models/floor/Piastrelle.obj", "floor");
+	ResourceManager::LoadModel("assets/models/walls/wall.obj", "wall");
 
 	// Caricamento delle texture
 	ResourceManager::LoadTexture("assets/textures/container.jpg", false, "cassa");
@@ -155,6 +157,7 @@ void Game::Update(float deltaTime) {
 	// spawn dei customer (PER ORA NON CONTROLLATO)
 	this->CustomerManager->SpawnCustomers(deltaTime);
 	
+	DoCollisions();
 }
 
 void Game::ProcessInput(float deltaTime) {
@@ -197,4 +200,13 @@ void CleanWc(Wc* wc, float cleanDistance) {
 void Game::UpdateRenderData() {
 	renderData.cameraPosition = camera->Position;
 	renderData.viewMatrix = camera->GetViewMatrix(); // non da problemi metterla qui e non nei singoli come prima?
+}
+
+void Game::DoCollisions() {
+	for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
+		bool result = Utilities::CheckCollision((*Player), wc.wcObject);
+		if (result) {
+			// do something
+		}
+	}
 }
