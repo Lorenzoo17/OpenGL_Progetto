@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "utilities.h"
 #include "customer.h"
-
+#include "text_renderer.h"
 
 void CleanWc(Wc* wc, float cleanDistance);
 
@@ -23,6 +23,8 @@ GameObject* Player;
 const glm::vec3 INITIAL_PLAYER_POSITION(0.0f, 0.0f, 3.0f);
 const float PLAYER_INITIAL_VELOCITY(3.5f);
 float angle = 0.0f;
+
+TextRenderer* Text;
 
 bool interactPressed; // booleano che va a true se si preme E (test)
 
@@ -108,6 +110,10 @@ void Game::Init(){
 		renderData.lightPositions.push_back(this->Level->lights[i].Position);
 		renderData.lightColors.push_back(this->Level->lights[i].Color);
 	}
+
+	// Inizializzazione testo
+	Text = new TextRenderer(this->Width, this->Height);
+	Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
 }
 
 void Game::Render() {
@@ -124,6 +130,7 @@ void Game::Render() {
 
 	// Va renderizzato dopo per il blending (vedi glEnable(GL_BLEND) nel main), inoltre la posizione in z è 3.0f per averlo sopra tutto ma comunque sotto la camera (5.0f)
 	Player->Draw(renderData); // Rendering del player, si attiva in automatico lo shader giusto e viene assegnata la texture corretta
+	Text->RenderText("Prova", 300.0f, 1.0f, 1.0f);
 }
 
 void Game::Update(float deltaTime) {

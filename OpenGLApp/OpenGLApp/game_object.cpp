@@ -102,6 +102,8 @@ void GameObject::Draw(RenderData renderData)
         this->ObjectShader.SetVector3f("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
         this->ObjectShader.SetVector3f("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
+        this->ObjectShader.SetVector3f("color", this->Color); // colore (per wc essenzialmente), dichiarato come uniform nello shader e si moltiplica a result nel fragColor
+
         // Per ogni luce assegno gli stessi valori per ora
         for (int i = 0; i < renderData.lightPositions.size(); i++) {
             this->ObjectShader.SetVector3f(("pointLights[" + std::to_string(i) + "].position").c_str(), renderData.lightPositions[i]);

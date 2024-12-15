@@ -54,6 +54,9 @@
     <ClCompile Include="utilities.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="text_renderer.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -96,6 +99,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="text_renderer.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
