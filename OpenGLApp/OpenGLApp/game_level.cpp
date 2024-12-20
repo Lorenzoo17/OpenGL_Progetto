@@ -1,43 +1,23 @@
 #include "game_level.h"
 #include "resource_manager.h"
 
-int level_shape[13][8] = {
-		{1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 1, 0, 0, 1, 1, 1, 1}
-};
-
 GameLevel::GameLevel() {
 	init(); // Di default si esegue GameLevel::init, per una disposizione di base
 }
 
-void GameLevel::Load(std::vector<GameObject*> w) {
-	this->walls = w;
+void GameLevel::Load() {
+	//
 }
 
 void GameLevel::Draw(RenderData renderData) {
-	if (this->walls.size() > 0) {
-		for (GameObject*& w : this->walls) {
-			//w->Draw(renderData); // Si richiama direttamente il metodo draw dei gameobject
-		}
-		this->Wall_3d->Draw(renderData);
+
+	if (Room != nullptr) {
+		//Room->Draw(renderData);
 	}
 
-	if (this->floor.size() > 0) {
-		for (GameObject*& tale : this->floor) {
-			//tale->Draw(renderData);
-		}
-		this->Floor_3d->Draw(renderData);
+	if (Floor_3d != nullptr && Wall_3d != nullptr) {
+		Floor_3d->Draw(renderData);
+		Wall_3d->Draw(renderData);
 	}
 
 	if (this->toilets.size() > 0) {
@@ -59,38 +39,20 @@ void GameLevel::init() {
 
 	glm::vec3 offset = glm::vec3(-3.0f, -12.0f, 0.0f);
 
+	// Stanza
+	Room = new GameObject(glm::vec3(2.3f, -8.0f, -2.0f), glm::vec3(1.6f, 1.0f, 1.3f), ResourceManager::GetModel("room"));
+	Room->SetShader(ResourceManager::GetShader("3d_mult_light"));
+	Room->Rotation = glm::radians(90.0f);
+
 	// pavimento 3d
 
-	Floor_3d = new GameObject(glm::vec3(2.0f, -7.0f, -1.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("floor"));
+	Floor_3d = new GameObject(glm::vec3(2.0f, -8.0f, -1.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("floor"));
 	Floor_3d->SetShader(ResourceManager::GetShader("3d_mult_light"));
 	Floor_3d->Rotation = glm::radians(90.0f);
-
+	// 
 	Wall_3d = new GameObject(glm::vec3(2.0f, -8.0f, -2.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("wall"));
 	Wall_3d->SetShader(ResourceManager::GetShader("3d_mult_light"));
 	Wall_3d->Rotation = glm::radians(90.0f);
-
-	// Generazione pareti e pavimento
-
-	for (int i = 12; i >= 0; i--) {
-		for (int j = 7; j >= 0; j--) {
-			// calcolo posizione e size per ogni blocco
-			glm::vec3 position = glm::vec3(unit_width * j, unit_height * i, 0.0f) + offset;
-			glm::vec3 size = glm::vec3(unit_width, unit_height, 1.0f);
-
-			if (level_shape[i][j] == 1) { // parete
-				GameObject *brick = new GameObject(position, size, ResourceManager::GetTexture("parete"));
-				brick->Rotation = glm::radians(0.0f);
-				brick->SetShader(ResourceManager::GetShader("base"));
-				this->walls.push_back(brick);
-			}
-			else if (level_shape[i][j] == 0) { // pavimento
-				GameObject *tale = new GameObject(position, size, ResourceManager::GetTexture("pavimento"));
-				tale->Rotation = glm::radians(0.0f);
-				tale->SetShader(ResourceManager::GetShader("base"));
-				this->floor.push_back(tale);
-			}
-		}
-	}
 
 	// Generazione wc
 

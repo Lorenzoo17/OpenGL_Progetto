@@ -10,6 +10,7 @@
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
 std::map<std::string, Model>        ResourceManager::Models;
+std::map<std::string, std::string>  ResourceManager::Sounds;
 
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
@@ -114,4 +115,13 @@ Model ResourceManager::LoadModel(const char* file, std::string name) {
 
 Model ResourceManager::GetModel(std::string name) {
     return Models[name];
+}
+
+std::string ResourceManager::LoadSound(const char* file, std::string name) {
+    Sounds[name] = file;
+    return Sounds[name];
+}
+
+std::string ResourceManager::GetSound(std::string name) {
+    return Sounds[name];
 }

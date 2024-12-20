@@ -9,8 +9,7 @@
 // Definisce elementi di scena da renderizzare come pareti ed oggetti statici
 class GameLevel {
 public:
-	std::vector<GameObject*> walls = std::vector<GameObject*>(); // vettore ralativo alle pareti
-	std::vector<GameObject*> floor = std::vector<GameObject*>();
+	GameObject* Room;
 	std::vector<Wc> toilets = std::vector<Wc>();
 	std::vector<GameObject> lights = std::vector<GameObject>(); // Vettore delle luci
 	GameObject* Floor_3d;
@@ -18,7 +17,7 @@ public:
 
 	GameLevel(); // costruttore
 	void Draw(RenderData renderData);
-	void Load(std::vector<GameObject*> w); // per il caricamento delle varie componenti del livello (aggiungere man mano)
+	void Load(); // per il caricamento delle varie componenti del livello (aggiungere man mano)
 	void init(); // Vengono inizializzate le strutture direttamente in GameLevel
 };
 

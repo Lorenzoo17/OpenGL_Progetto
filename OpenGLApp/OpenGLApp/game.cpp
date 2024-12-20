@@ -51,6 +51,7 @@ void Game::Init(){
 	ResourceManager::LoadModel("assets/models/wc/Gabinetto.obj", "wc");
 	ResourceManager::LoadModel("assets/models/floor/Piastrelle.obj", "floor");
 	ResourceManager::LoadModel("assets/models/walls/wall.obj", "wall");
+	ResourceManager::LoadModel("assets/models/env/Restrooms.obj", "room");
 
 	// Caricamento delle texture
 	ResourceManager::LoadTexture("assets/textures/container.jpg", false, "cassa");
@@ -59,6 +60,11 @@ void Game::Init(){
 	ResourceManager::LoadTexture("assets/textures/wall.png", true, "parete");
 	ResourceManager::LoadTexture("assets/textures/wc.png", true, "wc");
 	ResourceManager::LoadTexture("assets/textures/slime.png", true, "slime");
+
+	// Caricamento suoni
+	ResourceManager::LoadSound("assets/sounds/bell.mp3", "bell");
+	ResourceManager::LoadSound("assets/sounds/wipe_fast.mp3", "wipe_fast");
+	ResourceManager::LoadSound("assets/sounds/door_open.mp3", "door_open");
 
 	// Si definisce la matrice di proiezione 
 	glm::mat4 projection = glm::mat4(1.0f);
@@ -130,7 +136,9 @@ void Game::Render() {
 
 	// Va renderizzato dopo per il blending (vedi glEnable(GL_BLEND) nel main), inoltre la posizione in z è 3.0f per averlo sopra tutto ma comunque sotto la camera (5.0f)
 	Player->Draw(renderData); // Rendering del player, si attiva in automatico lo shader giusto e viene assegnata la texture corretta
-	Text->RenderText("Prova", 300.0f, 1.0f, 1.0f);
+	
+	std::stringstream ss; ss << this->CustomerManager->customers_list.size();
+	Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
 }
 
 void Game::Update(float deltaTime) {
@@ -197,8 +205,10 @@ void Game::ProcessInput(float deltaTime) {
 }
 
 void CleanWc(Wc* wc, float cleanDistance) {
-	if (Utilities::CheckDistance(Player->Position, wc->wcObject.Position, 0.3f)) {
+	if (Utilities::CheckDistance(Player->Position, wc->wcObject.Position, 2.0f)) {
 		if (interactPressed) {
+			if (wc->isDirty)
+				Utilities::PlaySound("wipe_fast");
 			wc->Clean();
 		}
 	}
@@ -211,9 +221,31 @@ void Game::UpdateRenderData() {
 
 void Game::DoCollisions() {
 	for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
-		bool result = Utilities::CheckCollision((*Player), wc.wcObject);
-		if (result) {
-			// do something
+		Collision result = Utilities::CheckCollision((*Player), wc.wcObject);
+
+		if (std::get<0>(result)) {
+			Direction dir = std::get<1>(result);
+			glm::vec3 diff_vector = std::get<2>(result);
+
+			// Calcola la penetrazione
+			float penetrationX = wc.wcObject.Size.x / 2.0f - std::abs(diff_vector.x);
+			float penetrationY = wc.wcObject.Size.y / 2.0f - std::abs(diff_vector.y);
+
+			if (dir == DIR_LEFT || dir == DIR_RIGHT) // collisione orizzontale
+			{
+				if (dir == DIR_LEFT)
+					Player->Position.x += penetrationX; // Sposta il giocatore a sinistra
+				else
+					Player->Position.x -= penetrationX; // Sposta il giocatore a destra
+			}
+			else if (dir == DIR_UP || dir == DIR_DOWN) // collisione verticale
+			{
+				if (dir == DIR_UP)
+					Player->Position.y -= penetrationY; // Sposta il giocatore in alto
+				else
+					Player->Position.y += penetrationY; // Sposta il giocatore in basso
+			}
+		
 		}
 	}
 }

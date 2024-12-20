@@ -18,6 +18,7 @@ public:
     static std::map<std::string, Shader>    Shaders;
     static std::map<std::string, Texture2D> Textures;
     static std::map<std::string, Model> Models;
+    static std::map<std::string, std::string> Sounds;
     // Caricamento e generazione di uno shader, prende il file vs, fs, gs (si puo mettere a nullptr) e si assegna un nome allo shader
     static Shader    LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
     // Ritorna lo shader con il nome definito
@@ -30,6 +31,10 @@ public:
     static Model LoadModel(const char* file, std::string name);
 
     static Model GetModel(std::string name);
+
+    static std::string LoadSound(const char* file, std::string name);
+
+    static std::string GetSound(std::string name);
 
     static void      Clear();
 private:

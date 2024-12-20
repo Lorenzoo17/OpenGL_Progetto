@@ -1,5 +1,6 @@
 #include "customers_manager.h"
 #include "resource_manager.h"
+#include "utilities.h"
 
 CustomersManager::CustomersManager(float spawnRate) {
 	this->spawnRateTime = spawnRate; // Inizializzo spawnratetime
@@ -10,6 +11,7 @@ void CustomersManager::SpawnCustomers(float deltaTime) {
 	// Qui posso anche controllare quanti elementi ci sono nella lista (Es se ho piu di 10 elementi, quindi 10 customer in coda non spawno proprio)
 	if (this->timeBtwSpawn <= 0 && static_cast<int>(this->customers_list.size()) < 10) { // ogni spawnRateTime
 		Spawn(); // spawno nuovo customer
+		Utilities::PlaySound("door_open"); // Ogni volta che spawna un nuovo customer si sente il suono della campanella
 		this->timeBtwSpawn = this->spawnRateTime;
 	}
 	else {
@@ -22,7 +24,7 @@ void CustomersManager::SpawnCustomers(float deltaTime) {
 
 void CustomersManager::Spawn() {
 	// spawn per ora fissa
-	glm::vec3 spawnPosition = glm::vec3(-1.0f, 2.0f, 2.0f); // 2.0f sulla z per essere sotto al player ma sopra wc
+	glm::vec3 spawnPosition = glm::vec3(-1.0f, 4.0f, 2.0f); // 2.0f sulla z per essere sotto al player ma sopra wc
 	glm::vec3 exitPosition = spawnPosition; // per ora uguale a spawn
 	float customerSpeed = 0.5f; // Per ora fissa
 
@@ -37,7 +39,7 @@ void CustomersManager::Spawn() {
 
 	this->customers_list.push_back(newCustomer);
 
-	printf("Customer list size : %d\n", static_cast<int>(this->customers_list.size()));
+	// printf("Customer list size : %d\n", static_cast<int>(this->customers_list.size()));
 
 	// evitare problemi con memoria:
 	// distruttore in gameObject su quadVAO -> Necessita che tutti i gameobject siano dichiarati tramite puntatori (con new)

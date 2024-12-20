@@ -43,7 +43,7 @@ void Customer::CustomerWait() {
 }
 
 void Customer::CustomerDirty() {
-	printf("Sporcato"); // sporca
+	//printf("Sporcato"); // sporca
 	this->targetWc->MakeDirty(glm::vec3(0.5f, 0.4f, 0.3f)); // richiama metodo makedirty, per cambiare il colore al wc
 	this->currentState = CUSTOMER_EXIT; // esce
 	this->SetPath(exitPosition);

@@ -121,7 +121,7 @@ void GameObject::Draw(RenderData renderData)
         // Le traslazioni sono per avere come origine il punto il alto a sinistra
         // model = glm::translate(model, glm::vec3(0.5f * this->Size.x, 0.5f * this->Size.y, 0.0f)); // move origin of rotation to center of quad
        
-        model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // then rotate
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // then rotate
         model = glm::rotate(model, this->Rotation, glm::vec3(0.0f, 1.0f, 0.0f)); // then rotate
         // model = glm::translate(model, glm::vec3(-0.5f * this->Size.x, -0.5f * this->Size.y, 0.0f)); // move origin back
 
