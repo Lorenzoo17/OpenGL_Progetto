@@ -31,6 +31,8 @@ bool interactPressed; // booleano che va a true se si preme E (test)
 float timeBtw = 2.0f;
 float wcDirtyRate = 2.0f;
 
+float game_score = 0.0f; // score momentaneo del gioco
+
 // rendering della mappa tramite classe apposita GameLevel
 // rendering di scatole e interazione in process input : quasi, migliorare 
 
@@ -52,6 +54,7 @@ void Game::Init(){
 	ResourceManager::LoadModel("assets/models/floor/Piastrelle.obj", "floor");
 	ResourceManager::LoadModel("assets/models/walls/wall.obj", "wall");
 	ResourceManager::LoadModel("assets/models/env/Restrooms.obj", "room");
+	ResourceManager::LoadModel("assets/models/lamp/lampadina.obj", "lamp");
 
 	// Caricamento delle texture
 	ResourceManager::LoadTexture("assets/textures/container.jpg", false, "cassa");
@@ -137,8 +140,10 @@ void Game::Render() {
 	// Va renderizzato dopo per il blending (vedi glEnable(GL_BLEND) nel main), inoltre la posizione in z è 3.0f per averlo sopra tutto ma comunque sotto la camera (5.0f)
 	Player->Draw(renderData); // Rendering del player, si attiva in automatico lo shader giusto e viene assegnata la texture corretta
 	
-	std::stringstream ss; ss << this->CustomerManager->customers_list.size();
-	Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
+	//std::stringstream ss; ss << this->CustomerManager->customers_list.size();
+	//Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
+	std::stringstream ss; ss << game_score;
+	Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
 }
 
 void Game::Update(float deltaTime) {
@@ -182,6 +187,7 @@ void Game::ProcessInput(float deltaTime) {
 		Player->MoveDirection += glm::vec3(0.0f, 1.0f, 0.0f);
 	}
 	if (this->Keys[GLFW_KEY_S]) {
+		// if(Player->Position.y > -2.0f) // es. definizione limiti mappa
 		Player->MoveDirection += glm::vec3(0.0f, -1.0f, 0.0f);
 	}
 	if (this->Keys[GLFW_KEY_A]) {
@@ -198,7 +204,9 @@ void Game::ProcessInput(float deltaTime) {
 		angle = atan2(Player->MoveDirection.x, -Player->MoveDirection.y); // si ottiene dove si sta dirigendo il player (angolo tra asse x e la direzione in cui si sta muovendo), in questo modo uso quest'angolo per ruotare attorno all'asse z
 	}
 
-	Player->Position += Player->MoveDirection * Player->Speed * deltaTime;
+	glm::vec3 desiredPosition = Player->Position + Player->MoveDirection * Player->Speed * deltaTime;
+
+	Player->Position = desiredPosition;
 	Player->Rotation = angle; // PER MODELLI 3D SI FA ATTORNO AD ASSE Y! QUINDI ORA IN GAMEOBJECT QUESTE ROTAZIONI LE APPLICO AD ASSE Y
 
 	interactPressed = this->Keys[GLFW_KEY_E];
@@ -207,8 +215,10 @@ void Game::ProcessInput(float deltaTime) {
 void CleanWc(Wc* wc, float cleanDistance) {
 	if (Utilities::CheckDistance(Player->Position, wc->wcObject.Position, 2.0f)) {
 		if (interactPressed) {
-			if (wc->isDirty)
+			if (wc->isDirty) {
 				Utilities::PlaySound("wipe_fast");
+				game_score += 10.0f;
+			}
 			wc->Clean();
 		}
 	}
@@ -220,6 +230,9 @@ void Game::UpdateRenderData() {
 }
 
 void Game::DoCollisions() {
+	if (glm::length(Player->MoveDirection) == 0) // calcolo le collisioni solo se il player si sta muovendo
+		return; 
+
 	for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
 		Collision result = Utilities::CheckCollision((*Player), wc.wcObject);
 
@@ -228,22 +241,19 @@ void Game::DoCollisions() {
 			glm::vec3 diff_vector = std::get<2>(result);
 
 			// Calcola la penetrazione
-			float penetrationX = wc.wcObject.Size.x / 2.0f - std::abs(diff_vector.x);
-			float penetrationY = wc.wcObject.Size.y / 2.0f - std::abs(diff_vector.y);
+			float penetrationX = wc.wcObject.Size.x / 2.0f + Player->Size.x / 2.0f - std::abs(diff_vector.x);
+			float penetrationY = wc.wcObject.Size.y / 2.0f + Player->Size.y / 2.0f - std::abs(diff_vector.y);
 
-			if (dir == DIR_LEFT || dir == DIR_RIGHT) // collisione orizzontale
-			{
-				if (dir == DIR_LEFT)
-					Player->Position.x += penetrationX; // Sposta il giocatore a sinistra
-				else
-					Player->Position.x -= penetrationX; // Sposta il giocatore a destra
+			if (dir == DIR_LEFT && Player->MoveDirection.x > 0)
+				Player->Position.x -= penetrationX; // Sposta il giocatore a sinistra
+			else if (dir == DIR_RIGHT && Player->MoveDirection.x < 0)
+				Player->Position.x += penetrationX; // Sposta il giocatore a destra
+
+			if (dir == DIR_UP && Player->MoveDirection.y < 0) {
+				Player->Position.y += penetrationY; // Sposta il giocatore in alto
 			}
-			else if (dir == DIR_UP || dir == DIR_DOWN) // collisione verticale
-			{
-				if (dir == DIR_UP)
-					Player->Position.y -= penetrationY; // Sposta il giocatore in alto
-				else
-					Player->Position.y += penetrationY; // Sposta il giocatore in basso
+			else if (dir == DIR_DOWN && Player->MoveDirection.y > 0) {
+				Player->Position.y -= penetrationY; // Sposta il giocatore in basso
 			}
 		
 		}

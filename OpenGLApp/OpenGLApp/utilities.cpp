@@ -15,32 +15,15 @@ glm::vec3 Utilities::NormalizeVector(glm::vec3 v) {
 
 Collision Utilities::CheckCollision(GameObject& one, GameObject& two) // AABB - AABB collision
 {
-    // Calcolo del centro di entrambi i box collider
-    glm::vec3 centerOne(
-        one.Position.x + one.Size.x / 2.0f,
-        one.Position.y + one.Size.y / 2.0f,
-        0.0f
-    );
+    // Il centro corrisponde con le posizioni dei GameObject
+    glm::vec3 centerOne = glm::vec3(one.Position.x, one.Position.y, 0.0f); // Indipendente da asse z al momento
+    glm::vec3 centerTwo = glm::vec3(two.Position.x, two.Position.y, 0.0f);
 
-    glm::vec3 centerTwo(
-        two.Position.x + two.Size.x / 2.0f,
-        two.Position.y + two.Size.y / 2.0f,
-        0.0f
-    );
-
-    // Calcolo delle distanze tra i centri
     glm::vec3 difference = centerOne - centerTwo;
-
-    // Somma delle metà delle dimensioni di ciascun box
-    glm::vec3 combinedHalfExtents(
-        one.Size.x / 2.0f + two.Size.x / 2.0f,
-        one.Size.y / 2.0f + two.Size.y / 2.0f,
-        0.0f
-    );
+    glm::vec3 combinedHalfExtents(one.Size.x / 2.0f + two.Size.x / 2.0f, one.Size.y / 2.0f + two.Size.y / 2.0f, 0.0f);
 
     // Verifica della collisione su entrambi gli assi
-    if (std::abs(difference.x) <= combinedHalfExtents.x &&
-        std::abs(difference.y) <= combinedHalfExtents.y)
+    if (std::abs(difference.x) <= combinedHalfExtents.x && std::abs(difference.y) <= combinedHalfExtents.y)
     {
         return std::make_tuple(true, VectorDirection(difference), difference);
     }

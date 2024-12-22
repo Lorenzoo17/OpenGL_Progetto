@@ -84,12 +84,18 @@ void GameLevel::init() {
 	// Luci
 	// Posizione fissa delle luci decisa direttamente in fase di inizializzazione
 	// Vettori paralleli per posizione e colori delle luci
+
+	// PER CAMBIARE NUMERO DI LUCI MODIFICARE PARAMETRO PRESENTE NELLO SHADER!!!!!
+	// MODIFICARLO POI PER SETTARLO CON UNO UNIFORM!!
+	// PAVIMENTO MOLTO IN BASSO PER QUESTO LUCI SEMBRANO NON AGIRE SU DI ESSO
 	std::vector<glm::vec3> lightsPositions = {
-		glm::vec3(-2.0f, -1.0f, 5.0f),
-		glm::vec3(-2.0f, -5.0f, 5.0f),
-		glm::vec3(-2.0f, -9.0f, 5.0f)
+		glm::vec3(-2.0f, -1.0f, 4.0f),
+		glm::vec3(-2.0f, -5.0f, 4.0f),
+		glm::vec3(-2.0f, -9.0f, 4.0f),
+		glm::vec3(0.0f, -12.0f, 4.0f)
 	};
-	std::vector<glm::vec3> lightsColors = {
+	std::vector<glm::vec3> lightsColors = { // Colore per ora usato solo per dare un colore differente all'oggetto che rappresenta la luce, non cambia il colore della luce in se
+		glm::vec3(1.0f),
 		glm::vec3(1.0f),
 		glm::vec3(1.0f),
 		glm::vec3(1.0f)
@@ -99,9 +105,8 @@ void GameLevel::init() {
 
 	for (int i = 0; i < n_lights; i++) {
 		// Per ora metto come texture slime, volendo pero si possono anche non renderizzare, tanto conta solo la posizione
-		GameObject newLight(lightsPositions[i], glm::vec3(1.0f), ResourceManager::GetTexture("slime"), 0.0f, lightsColors[i]);
-		newLight.SetShader(ResourceManager::GetShader("base")); // shader base
-
+		GameObject newLight(lightsPositions[i], glm::vec3(0.3f), ResourceManager::GetModel("lamp"), 0.0f, lightsColors[i]);
+		newLight.SetShader(ResourceManager::GetShader("3d_mult_light")); // shader base
 		this->lights.push_back(newLight);
 	}
 }
