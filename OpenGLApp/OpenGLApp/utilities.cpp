@@ -1,6 +1,6 @@
 #include "utilities.h"
 
-ISoundEngine* SoundEngine = createIrrKlangDevice();
+//ISoundEngine* SoundEngine = createIrrKlangDevice();
 
 bool Utilities::CheckDistance(glm::vec3 v1, glm::vec3 v2, float distance) {
 	if (sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) < distance)) {
@@ -54,5 +54,5 @@ Direction Utilities::VectorDirection(glm::vec3 target)
 }
 
 void Utilities::PlaySound(std::string soundName) {
-    SoundEngine->play2D(ResourceManager::GetSound(soundName).c_str());
+    //SoundEngine->play2D(ResourceManager::GetSound(soundName).c_str());
 }

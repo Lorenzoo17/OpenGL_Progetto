@@ -5,10 +5,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "game_object.h"
-#include "irrKlang.h"
+//#include "irrKlang.h"
 #include "resource_manager.h"
 
-using namespace irrklang;
+//using namespace irrklang;
 
 enum Direction {
 	DIR_UP,

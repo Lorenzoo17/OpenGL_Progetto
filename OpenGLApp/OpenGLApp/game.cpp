@@ -121,8 +121,8 @@ void Game::Init(){
 	}
 
 	// Inizializzazione testo
-	Text = new TextRenderer(this->Width, this->Height);
-	Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
+	//Text = new TextRenderer(this->Width, this->Height);
+	//Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
 }
 
 void Game::Render() {
@@ -143,7 +143,7 @@ void Game::Render() {
 	//std::stringstream ss; ss << this->CustomerManager->customers_list.size();
 	//Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
 	std::stringstream ss; ss << game_score;
-	Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
+	//Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
 }
 
 void Game::Update(float deltaTime) {
