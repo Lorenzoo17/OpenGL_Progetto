@@ -3,14 +3,21 @@
 
 
 Player::Player(glm::vec3 pos, glm::vec3 size, Model object_model, float speed, glm::vec3 color,
-               glm::vec3 moveDirection , int MaxWater,    GameLevel* Level):
-GameObject(pos,  size,  object_model, speed ,  color, moveDirection), MaxWaterLevel(MaxWater), Level(Level){}
+               glm::vec3 moveDirection , int MaxWater,    Game* game):
+GameObject(pos,  size,  object_model, speed ,  color, moveDirection), MaxWaterLevel(MaxWater), WaterLevel(MaxWater), game(game), Level(game->Level),speedReached(0.0f){}
 
 
 
 void Player::Move(glm::vec3 direction, float deltaTime)
 {
     static float angle;
+    
+    /*
+    if(speedReached < 1)
+    {
+        speedReached = sin(deltaTime);
+    }
+    */
     
     if (glm::length(direction) > 0.0f) {
         // Normalizzo la direzione
@@ -52,6 +59,22 @@ void Player::collision() {
                 this->Position.y -= penetrationY; // Sposta il giocatore in basso
             }
         
+        }
+    }
+}
+
+void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
+    if (Utilities::CheckDistance(this->Position, wc->wcObject.Position, 2.0f)) {
+        if (interactPressed) {
+            if (wc->isDirty) {
+                Utilities::PlaySound("wipe_fast");
+                //game_score += 10.0f;
+                this->game->game_score +=10.0f;
+                this->WaterLevel -= 1;
+                std::cout << WaterLevel << std::endl;
+
+            }
+            wc->Clean();
         }
     }
 }

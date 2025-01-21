@@ -15,7 +15,7 @@ enum Camera_Movement {
 // Default camera values
 
 const float YAW = -90.0f;
-const float PITCH = 0.0f;
+const float PITCH = 50.0f;
 const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
@@ -73,8 +73,11 @@ public:
     }
 
 	void CameraFollow(glm::vec3 targetPosition, float deltaTime) {
+        glm::vec3 offset =  glm::vec3(0.0f, -2.0f, 0.0f);;
+
 		glm::vec3 desiredPosition = glm::vec3(targetPosition.x, targetPosition.y, this->Position.z);
-		float interValue = 2.0f * deltaTime;
+        desiredPosition += offset;
+		float interValue = 2.5f * deltaTime;
 
 		desiredPosition = VectorInterpolation(this->Position, desiredPosition, interValue);
 		this->Position = desiredPosition;
@@ -87,10 +90,11 @@ public:
 private:
 	void UpdateCameraVectors() {
 		glm::vec3 direction;
+
 		direction.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 		direction.y = sin(glm::radians(Pitch));
 		direction.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-
+        
 		Front = glm::normalize(direction);
 
 		Right = -1.0f * glm::normalize(glm::cross(Front, WorldUp));

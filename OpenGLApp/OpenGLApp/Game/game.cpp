@@ -19,7 +19,7 @@ void CleanWc(Wc* wc, float cleanDistance);
 // LUCI COME GAMEOBJECTS ? DI BASE NON NECESSARIO IN QUANTO CONTA SOLO LA POSIZIONE E POSSO NON VOLERLE RENDERIZZARE, PER ORA LASCIO COSI
 
 Camera* camera;
-glm::vec3 INITIAL_CAMERA_POSITION(0.0f, 0.0f, 5.0f);
+glm::vec3 INITIAL_CAMERA_POSITION(0.0f, 0.0f, 8.0f);
 
 Player* player;
 //GameObject* Player;
@@ -77,7 +77,7 @@ void Game::Init(){
     // Si inizializza il livello
     this->Level = new GameLevel();
     
-    player = new Player(INITIAL_PLAYER_POSITION, glm::vec3(1.0f), ResourceManager::GetModel("robot1"), PLAYER_INITIAL_VELOCITY, glm::vec3(1.0f), glm::vec3(0.0f), 10, Level);
+    player = new Player(INITIAL_PLAYER_POSITION, glm::vec3(1.0f), ResourceManager::GetModel("robot1"), PLAYER_INITIAL_VELOCITY, glm::vec3(1.0f), glm::vec3(0.0f), 10, this);
 	player->SetShader(ResourceManager::GetShader("3d_mult_light")); // Si assegna anche uno shader al player
 
 	
@@ -154,7 +154,7 @@ void Game::Update(float deltaTime) {
 		}
 
 		// Pulizia dei wc del player (Per ora gestito direttamente in questo script)
-		CleanWc(&wc, 0.2f);
+        player->CleanWc(&wc, 0.2f, interactPressed);
 	}
 
 	// spawn dei customer (PER ORA NON CONTROLLATO)
@@ -181,6 +181,7 @@ void Game::ProcessInput(float deltaTime) {
         player->Move(glm::vec3(1.0f, 0.0f, 0.0f),deltaTime);
     }
     interactPressed = this->Keys[GLFW_KEY_E];
+    
 }
 
 /*
@@ -218,8 +219,9 @@ void Game::ProcessInput(float deltaTime) {
 */
 
 void Game::DoCollisions() {
-    if (glm::length(player->MoveDirection) == 0) // calcolo le collisioni solo se il player si sta muovendo
-        return;
+    
+    //if (glm::length(player->MoveDirection) == 0) // calcolo le collisioni solo se il player si sta muovendo
+      //  return;
 
     for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
         Collision result = Utilities::CheckCollision((*player), wc.wcObject);
@@ -246,19 +248,6 @@ void Game::DoCollisions() {
         
         }
     }
-}
-
-
-void CleanWc(Wc* wc, float cleanDistance) {
-	if (Utilities::CheckDistance(player->Position, wc->wcObject.Position, 2.0f)) {
-		if (interactPressed) {
-			if (wc->isDirty) {
-				Utilities::PlaySound("wipe_fast");
-				game_score += 10.0f;
-			}
-			wc->Clean();
-		}
-	}
 }
 
 void Game::UpdateRenderData() {
