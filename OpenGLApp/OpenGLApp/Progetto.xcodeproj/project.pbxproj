@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		553E5AAE2D42F71A00CD7E73 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 553E5AAD2D42F71500CD7E73 /* Time.cpp */; };
 		55505D402D309061007EA12E /* wc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55505CF92D309061007EA12E /* wc.cpp */; };
 		55505D412D309061007EA12E /* game_object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55505C9E2D309061007EA12E /* game_object.cpp */; };
 		55505D422D309061007EA12E /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55505CF12D309061007EA12E /* stb_image.cpp */; };
@@ -39,6 +40,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		553E5AAD2D42F71500CD7E73 /* Time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Time.cpp; sourceTree = "<group>"; };
 		55505C962D309061007EA12E /* customer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = customer.cpp; sourceTree = "<group>"; };
 		55505C982D309061007EA12E /* customers_manager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = customers_manager.cpp; sourceTree = "<group>"; };
 		55505C9A2D309061007EA12E /* game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = game.cpp; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 		55F457AE2D3F10DF001E7DF9 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				553E5AAD2D42F71500CD7E73 /* Time.cpp */,
 				5560A4082D3FFDF200FBC6C3 /* Player.cpp */,
 				55505C962D309061007EA12E /* customer.cpp */,
 				55505C982D309061007EA12E /* customers_manager.cpp */,
@@ -219,6 +222,7 @@
 				55505D452D309061007EA12E /* texture.cpp in Sources */,
 				55505D472D309061007EA12E /* game_level.cpp in Sources */,
 				5560A4092D3FFDF700FBC6C3 /* Player.cpp in Sources */,
+				553E5AAE2D42F71A00CD7E73 /* Time.cpp in Sources */,
 				55505D482D309061007EA12E /* customers_manager.cpp in Sources */,
 				55505D492D309061007EA12E /* game.cpp in Sources */,
 				55505D4A2D309061007EA12E /* shader.cpp in Sources */,

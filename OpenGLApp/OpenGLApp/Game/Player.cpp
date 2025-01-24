@@ -1,37 +1,62 @@
 #include "Player.h"
 #include "utilities.h"
+#include <cmath>
+#include "time.h"
 
 
-Player::Player(glm::vec3 pos, glm::vec3 size, Model object_model, float speed, glm::vec3 color,
+Player::Player(glm::vec3 pos, glm::vec3 rotation, glm::vec3 size, Model object_model, float speed, glm::vec3 color,
                glm::vec3 moveDirection , int MaxWater,    Game* game):
-GameObject(pos,  size,  object_model, speed ,  color, moveDirection), MaxWaterLevel(MaxWater), WaterLevel(MaxWater), game(game), Level(game->Level),speedReached(0.0f){}
+GameObject(pos, rotation,  size,  object_model, speed ,  color, moveDirection), MaxWaterLevel(MaxWater), WaterLevel(MaxWater), game(game), Level(game->Level),speedReached(0.0f), canMove(true){}
 
 
+
+float waitTime = 1;
+
+
+void Player::Idle()
+{
+    float oldPos = 0;
+    float heightMult = 0.5f;
+    this->Position.z *= 0.5f * sin(heightMult * Time::currentTime * Time::deltaTime) -oldPos;
+    oldPos = this->Position.z;
+    std::cout << this->Position.z << std::endl;
+}
 
 void Player::Move(glm::vec3 direction, float deltaTime)
 {
     static float angle;
-    
+    static float counter = waitTime;
     /*
     if(speedReached < 1)
     {
         speedReached = sin(deltaTime);
     }
     */
-    
-    if (glm::length(direction) > 0.0f) {
-        // Normalizzo la direzione
-        direction = direction / sqrt(glm::dot(direction, direction));
+    if(canMove)
+    {
+        if (glm::length(direction) > 0.0f) {
+            // Normalizzo la direzione
+            direction = direction / sqrt(glm::dot(direction, direction));
 
-        angle = atan2(direction.x, -direction.y); // si ottiene dove si sta dirigendo il player (angolo tra asse x e la direzione in cui si sta muovendo), in questo modo uso quest'angolo per ruotare attorno all'asse z
+            angle = atan2(direction.x, -direction.y); // si ottiene dove si sta dirigendo il player (angolo tra asse x e la direzione in cui si sta muovendo), in questo modo uso quest'angolo per ruotare attorno all'asse z
+            angle = angle * 180.0 / M_PI; // Conversione da radianti a gradi
+
+        }
+        
+        glm::vec3 desiredPosition = this->Position + direction * this->Speed * deltaTime;
+
+        this->Position = desiredPosition;
+        this->Rotation.y = angle;
+        //this->SetRotation( glm::vec3(this->Rotation.x, this->Rotation.y, this->Rotation.z)); // PER MODELLI 3D SI FA ATTORNO AD ASSE Y! QUINDI ORA IN GAMEOBJECT QUESTE ROTAZIONI LE APPLICO AD ASSE Y
+
+        Player::collision();
     }
-    
-    glm::vec3 desiredPosition = this->Position + direction * this->Speed * deltaTime;
-
-    this->Position = desiredPosition;
-    this->Rotation = angle; // PER MODELLI 3D SI FA ATTORNO AD ASSE Y! QUINDI ORA IN GAMEOBJECT QUESTE ROTAZIONI LE APPLICO AD ASSE Y
-
-    Player::collision();
+    else
+    {
+        //disiabilita il movimento del player per un breve periodo per poi riabilitarlo
+        counter -= Time::deltaTime;
+        if (counter <= 0){counter = waitTime; canMove = true;}
+    }
 }
 
 void Player::collision() {
@@ -75,6 +100,7 @@ void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
 
             }
             wc->Clean();
+            canMove = false;
         }
     }
 }

@@ -1,6 +1,7 @@
 #include "customer.h"
 #include "utilities.h"
 #include <algorithm>
+#include "time.h"
 
 Customer::Customer(GameObject customer_object, glm::vec3 exit_position) {
 	this->customerObject = customer_object;
@@ -13,23 +14,28 @@ Customer::Customer(GameObject customer_object, glm::vec3 exit_position) {
 }
 
 void Customer::CustomerBehaviour(float deltaTime) {
-	if (currentState == CUSTOMER_MOVE_WC) {
-		// CustomerMove(deltaTime);
-		bool isExit = false;
-		CustomerMovePath(deltaTime, isExit); // si muove verso il wc seguendo il path specificato
-	}
-	else if (currentState == CUSTOMER_DIRTY) {
-		CustomerDirty();
-	}
-	else if (currentState == CUSTOMER_EXIT) {
-		// CustomerExit(deltaTime);
-		bool isExit = true; // in uscita devo fare anche altre operazioni, quindi lo decido con booleano
-		CustomerMovePath(deltaTime, isExit); // si muove verso l'uscita seguendo il path reverse
-	}
-	else {
-		CustomerWait();
-	}
+    
+    bool isExit;
+    switch (currentState)
+    {
+        case CUSTOMER_MOVE_WC:
+            isExit = false;
+            CustomerMovePath(isExit); // si muove verso il wc seguendo il path specificato
+            break;
+        case CUSTOMER_DIRTY:
+            CustomerDirty();
+            break;
+        case CUSTOMER_EXIT:
+            isExit = true;
+            CustomerMovePath(isExit); // si muove verso il wc seguendo il path specificato
+            break;
+        default:
+            CustomerWait();
+            break;
+        
+    }
 }
+
 
 void Customer::CustomerWait() {
 	if (this->targetWc != nullptr) { // se c'e' un wc disponibile
@@ -49,7 +55,8 @@ void Customer::CustomerDirty() {
 	this->SetPath(exitPosition);
 }
 
-void Customer::CustomerMovePath(float deltaTime, bool exit) {
+void Customer::CustomerMovePath(bool exit) {
+    double deltaTime = Time::deltaTime;
 	if (this->pathPoints.size() > 0) { // se il percorso esiste
 		if (this->currentPathPoint < (int)this->pathPoints.size()) { // se non ho raggiunto l'ultima tappa
 			glm::vec3 targetPoint = this->pathPoints[currentPathPoint]; // il target point equivale alla tappa relativa al currentPathPoint

@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "time.h"
 
 enum Camera_Movement {
 	FORWARD,
@@ -72,7 +73,8 @@ public:
         
     }
 
-	void CameraFollow(glm::vec3 targetPosition, float deltaTime) {
+	void CameraFollow(glm::vec3 targetPosition) {
+        double deltaTime = Time::deltaTime;
         glm::vec3 offset =  glm::vec3(0.0f, -2.0f, 0.0f);;
 
 		glm::vec3 desiredPosition = glm::vec3(targetPosition.x, targetPosition.y, this->Position.z);

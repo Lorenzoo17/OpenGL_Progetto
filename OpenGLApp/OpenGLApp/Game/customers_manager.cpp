@@ -33,7 +33,7 @@ void CustomersManager::Spawn() {
 	// newCustomerObject.SetShader(ResourceManager::GetShader("base"));
 	// 
 	// per modelli 3D
-	GameObject newCustomerObject(spawnPosition, glm::vec3(0.5f), ResourceManager::GetModel("slime1"), customerSpeed);
+	GameObject newCustomerObject(spawnPosition, glm::vec3(90.0f,0.0f,0.0f), glm::vec3(0.5f), ResourceManager::GetModel("slime1"), customerSpeed);
 	newCustomerObject.SetShader(ResourceManager::GetShader("3d_mult_light"));
 	Customer newCustomer(newCustomerObject, exitPosition);
 

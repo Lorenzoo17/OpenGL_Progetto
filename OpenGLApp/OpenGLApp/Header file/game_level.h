@@ -16,9 +16,10 @@ public:
 	GameObject* Wall_3d;
 
 	GameLevel(); // costruttore
-	void Draw(RenderData renderData);
+    
 	void Load(); // per il caricamento delle varie componenti del livello (aggiungere man mano)
 	void init(); // Vengono inizializzate le strutture direttamente in GameLevel
+    void Draw(RenderData renderData);
 };
 
 #endif // !GAME_LEVEL

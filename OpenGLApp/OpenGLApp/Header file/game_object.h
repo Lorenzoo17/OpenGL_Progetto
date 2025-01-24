@@ -24,12 +24,12 @@ class GameObject
 {
 public:
     // object state
-    glm::vec3   Position, Size;
+    glm::vec3   Position, Rotation, Size;
     float Speed;
     glm::vec3 MoveDirection;
     glm::vec3   Color;
     Shader ObjectShader;
-    float       Rotation;
+    //float       Rotation;
     bool        IsSolid;
     bool        Destroyed;
     // render state
@@ -39,7 +39,8 @@ public:
     GameObject();
     ~GameObject();
     GameObject(glm::vec3 pos, glm::vec3 size, Texture2D sprite, float speed = 0.0f, glm::vec3 color = glm::vec3(1.0f), glm::vec3 moveDirection = glm::vec3(0.0f));
-    GameObject(glm::vec3 pos, glm::vec3 size, Model object_model, float speed = 0.0f, glm::vec3 color = glm::vec3(1.0f), glm::vec3 moveDirection = glm::vec3(0.0f));
+    GameObject(glm::vec3 pos, glm::vec3 rotation, glm::vec3 size, Model object_model, float speed = 0.0f, glm::vec3 color = glm::vec3(1.0f), glm::vec3 moveDirection = glm::vec3(0.0f));
+    
     void SetShader(Shader shader);
     // draw sprite
     virtual void Draw(RenderData renderData);

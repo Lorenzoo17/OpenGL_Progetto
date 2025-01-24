@@ -5,6 +5,7 @@
 #include "utilities.h"
 #include "customer.h"
 #include "Player.h"
+#include "time.h"
 
 //#include "text_renderer.h"
 
@@ -77,7 +78,7 @@ void Game::Init(){
     // Si inizializza il livello
     this->Level = new GameLevel();
     
-    player = new Player(INITIAL_PLAYER_POSITION, glm::vec3(1.0f), ResourceManager::GetModel("robot1"), PLAYER_INITIAL_VELOCITY, glm::vec3(1.0f), glm::vec3(0.0f), 10, this);
+    player = new Player(INITIAL_PLAYER_POSITION, glm::vec3(70.0f, 0.0f, 0.0f), glm::vec3(1.0f), ResourceManager::GetModel("robot1"), PLAYER_INITIAL_VELOCITY, glm::vec3(1.0f), glm::vec3(0.0f), 10, this);
 	player->SetShader(ResourceManager::GetShader("3d_mult_light")); // Si assegna anche uno shader al player
 
 	
@@ -129,9 +130,11 @@ void Game::Render() {
 	//Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
 }
 
-void Game::Update(float deltaTime) {
-	camera->CameraFollow(player->Position, deltaTime); // Per camera che segue il player
-
+void Game::Update() {
+    
+    double deltaTime = Time::deltaTime;
+	camera->CameraFollow(player->Position); // Per camera che segue il player
+    //player->Idle();
 	// aggiorno la matrice di vista e la assegno agli shader (NECESSARIO FARLO PRIMA DELLA MODEL, QUI NON VA BENE)
 	// ResourceManager::GetShader("base").SetMatrix4("view", camera->GetViewMatrix());
 	// ResourceManager::GetShader("base2").SetMatrix4("view", camera->GetViewMatrix());
@@ -148,11 +151,9 @@ void Game::Update(float deltaTime) {
 						wc.available = false; // si mette il wc come occupato
 					}
 				}
-
 				c.CustomerBehaviour(deltaTime); // si esegue la FSM per ogni cliente
 			}
 		}
-
 		// Pulizia dei wc del player (Per ora gestito direttamente in questo script)
         player->CleanWc(&wc, 0.2f, interactPressed);
 	}
@@ -163,7 +164,8 @@ void Game::Update(float deltaTime) {
 	DoCollisions();
 }
 
-void Game::ProcessInput(float deltaTime) {
+void Game::ProcessInput() {
+    double deltaTime = Time::deltaTime;
     player->MoveDirection = glm::vec3(0.0f); // resetto per evitare che continui a muoversi senza il mio input
 
     if (this->Keys[GLFW_KEY_W]) {
@@ -184,39 +186,7 @@ void Game::ProcessInput(float deltaTime) {
     
 }
 
-/*
-void Game::ProcessInput(float deltaTime) {
-	Player->MoveDirection = glm::vec3(0.0f); // resetto per evitare che continui a muoversi senza il mio input
 
-	if (this->Keys[GLFW_KEY_W]) {
-		Player->MoveDirection += glm::vec3(0.0f, 1.0f, 0.0f);
-	}
-	if (this->Keys[GLFW_KEY_S]) {
-		// if(Player->Position.y > -2.0f) // es. definizione limiti mappa
-		Player->MoveDirection += glm::vec3(0.0f, -1.0f, 0.0f);
-	}
-	if (this->Keys[GLFW_KEY_A]) {
-		Player->MoveDirection += glm::vec3(-1.0f, 0.0f, 0.0f);
-	}
-	if (this->Keys[GLFW_KEY_D]) {
-		Player->MoveDirection += glm::vec3(1.0f, 0.0f, 0.0f);
-	}
-
-	if (glm::length(Player->MoveDirection) > 0.0f) {
-		// Normalizzo la direzione
-		Player->MoveDirection = Player->MoveDirection / sqrt(glm::dot(Player->MoveDirection, Player->MoveDirection));
-
-		angle = atan2(Player->MoveDirection.x, -Player->MoveDirection.y); // si ottiene dove si sta dirigendo il player (angolo tra asse x e la direzione in cui si sta muovendo), in questo modo uso quest'angolo per ruotare attorno all'asse z
-	}
-
-	glm::vec3 desiredPosition = Player->Position + Player->MoveDirection * Player->Speed * deltaTime;
-
-	Player->Position = desiredPosition;
-	Player->Rotation = angle; // PER MODELLI 3D SI FA ATTORNO AD ASSE Y! QUINDI ORA IN GAMEOBJECT QUESTE ROTAZIONI LE APPLICO AD ASSE Y
-
-	interactPressed = this->Keys[GLFW_KEY_E];
-}
-*/
 
 void Game::DoCollisions() {
     

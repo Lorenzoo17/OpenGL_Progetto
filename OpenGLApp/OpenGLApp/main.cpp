@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include "game.h"
+#include "time.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -87,14 +88,17 @@ int main()
         // input
         // -----
 
-        float currentTime = glfwGetTime();
+        double currentTime = glfwGetTime();
         deltaTime = currentTime - lastFrame;
         lastFrame = currentTime;
-
+        
+        Time::setTime(currentTime);
+        Time::setDeltatime(deltaTime);
+        
         // processInput(window);
 
-        MyGame.ProcessInput(deltaTime);
-        MyGame.Update(deltaTime);
+        MyGame.ProcessInput();
+        MyGame.Update();
 
         // render
         // ------

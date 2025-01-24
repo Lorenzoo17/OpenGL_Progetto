@@ -18,9 +18,9 @@ public:
 	Game(unsigned int Width, unsigned int Height);
 
 	void Init(); // Metodo dove si inizializzano variabili, shader, texture ecc... e viene eseguito una singola volta
-	void Update(float deltaTime); // Metodo dove vengono eseguiti i comportamenti che devono essere aggiornati ad ogni frame
+	void Update(); // Metodo dove vengono eseguiti i comportamenti che devono essere aggiornati ad ogni frame
 	void Render(); // Metodo dove si eseguono esclusivamente i rendering
-	void ProcessInput(float deltaTime); // Metodo dove si gestiscono gli input
+	void ProcessInput(); // Metodo dove si gestiscono gli input
 
 private:
 	void UpdateRenderData();
