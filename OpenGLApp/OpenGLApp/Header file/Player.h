@@ -24,9 +24,10 @@ public:
     void setMaxWaterLevel(int score);
     int getMaxWaterLevel();
     
-    void Idle();
+    void Idle(float initialPos);
     void Move(glm::vec3 direction, float deltaTime);
     void collision();
     void CleanWc(Wc* wc, float cleanDistance, bool interactPressed);
+    void clean(float cleanDistance, bool interactPressed);
 };
 #endif // PLAYER_H

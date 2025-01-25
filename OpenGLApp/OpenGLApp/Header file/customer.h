@@ -3,6 +3,7 @@
 
 #include "game_object.h"
 #include "wc.h"
+#include "customers_manager.h"
 #include <vector>
 
 enum CustomerState {
@@ -18,6 +19,7 @@ public:
 	glm::vec3 exitPosition; // posizione nella quale tornare quando ha finito
 	CustomerState currentState; // stato della FSM 
 	Wc* targetWc; // wc target che ha preso
+    CustomersManager* CustomerManager;
 
 	std::vector<glm::vec3> pathPoints = std::vector<glm::vec3>(); // vettore contenente i punti dove deve passare, da eseguire in CUSTOMER_MOVE_WC
 	// quando raggiunge il punto pathPoints[currentPathPoint] incremento currentPathPoint. Poi passo allo stato customer dirty una volta raggiunto l'ulitmo punto

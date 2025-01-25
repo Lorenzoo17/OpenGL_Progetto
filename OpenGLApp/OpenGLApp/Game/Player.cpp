@@ -13,12 +13,11 @@ GameObject(pos, rotation,  size,  object_model, speed ,  color, moveDirection), 
 float waitTime = 1;
 
 
-void Player::Idle()
+void Player::Idle(float initialPos)
 {
-    float oldPos = 0;
-    float heightMult = 0.5f;
-    this->Position.z *= 0.5f * sin(heightMult * Time::currentTime * Time::deltaTime) -oldPos;
-    oldPos = this->Position.z;
+    float speed = 1.0f;
+    float amplitude = 1/2;
+    this->Position.z =  initialPos + (amplitude * sin(Time::currentTime  * speed/5 )) ;
     std::cout << this->Position.z << std::endl;
 }
 
@@ -88,6 +87,8 @@ void Player::collision() {
     }
 }
 
+
+
 void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
     if (Utilities::CheckDistance(this->Position, wc->wcObject.Position, 2.0f)) {
         if (interactPressed) {
@@ -103,4 +104,12 @@ void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
             canMove = false;
         }
     }
+}
+
+void Player::clean(float cleanDistance, bool interactPressed)
+{
+    for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
+        CleanWc(&wc, 0.2f, interactPressed);
+    }
+
 }

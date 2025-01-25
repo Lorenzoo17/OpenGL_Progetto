@@ -89,10 +89,10 @@ int main()
         // -----
 
         double currentTime = glfwGetTime();
+        Time::setTime(currentTime);
+        
         deltaTime = currentTime - lastFrame;
         lastFrame = currentTime;
-        
-        Time::setTime(currentTime);
         Time::setDeltatime(deltaTime);
         
         // processInput(window);

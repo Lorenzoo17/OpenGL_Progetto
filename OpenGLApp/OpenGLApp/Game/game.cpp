@@ -90,7 +90,7 @@ void Game::Init(){
 
 	// settaggio customer_manager
 	float customerSpawnRate = 2.0f; // per ora fisso
-	this->CustomerManager = new CustomersManager(customerSpawnRate);
+    this->CustomerManager = new CustomersManager(customerSpawnRate, this->Level);
 
 	// Generazione customers statica
 	// creare customer_manager dove viene fatto da li
@@ -134,32 +134,18 @@ void Game::Update() {
     
     double deltaTime = Time::deltaTime;
 	camera->CameraFollow(player->Position); // Per camera che segue il player
-    //player->Idle();
+    //player->Idle(INITIAL_PLAYER_POSITION.z);
 	// aggiorno la matrice di vista e la assegno agli shader (NECESSARIO FARLO PRIMA DELLA MODEL, QUI NON VA BENE)
 	// ResourceManager::GetShader("base").SetMatrix4("view", camera->GetViewMatrix());
 	// ResourceManager::GetShader("base2").SetMatrix4("view", camera->GetViewMatrix());
 
-	// TEST CUSTOMERS -> customer che vanno verso i wc
-
-	for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
-		for (Customer& c : this->CustomerManager->customers_list) { // per ogni cliente
-			if (!c.customerObject.Destroyed) { // se il cliente non è destroyed
-				if (c.currentState == CUSTOMER_WAIT) { // se è in wait (non ha ancora un wc associato)
-					if (wc.available && !wc.isDirty) { // se il wc è disponibile e non è sporco
-						c.targetWc = &wc; // si assegna a quel cliente il suddetto wc
-						c.SetPath(wc.wcObject.Position); // si setta il path impostando come obiettivo la posizione di targetWc
-						wc.available = false; // si mette il wc come occupato
-					}
-				}
-				c.CustomerBehaviour(deltaTime); // si esegue la FSM per ogni cliente
-			}
-		}
-		// Pulizia dei wc del player (Per ora gestito direttamente in questo script)
-        player->CleanWc(&wc, 0.2f, interactPressed);
-	}
-
-	// spawn dei customer (PER ORA NON CONTROLLATO)
-	this->CustomerManager->SpawnCustomers(deltaTime);
+    
+    this->CustomerManager->updateBehaviour();
+     
+    // Pulizia dei wc del player
+    player->clean(0.2f, interactPressed);
+    // spawn dei customer (PER ORA NON CONTROLLATO)
+	this->CustomerManager->SpawnCustomers();
 	
 	DoCollisions();
 }

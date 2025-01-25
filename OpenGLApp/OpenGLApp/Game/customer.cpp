@@ -38,13 +38,14 @@ void Customer::CustomerBehaviour(float deltaTime) {
 
 
 void Customer::CustomerWait() {
+    glm::vec3 targetPoint = glm::vec3(-1.0f, 1.0f, 2.0f);
 	if (this->targetWc != nullptr) { // se c'e' un wc disponibile
 		this->startPosition = this->customerObject.Position;
 		this->currentState = CUSTOMER_MOVE_WC; // passo allo stato in cui si muove 
 	}
 	else { // Se non c'e' un wc disponibile
-		this->currentState = currentState;
-		this->customerObject.Position = this->customerObject.Position; // resta fermo
+        this->startPosition = this->customerObject.Position;
+        MoveTo(targetPoint, Time::deltaTime); // si muove verso di essa
 	}
 }
 
@@ -58,7 +59,7 @@ void Customer::CustomerDirty() {
 void Customer::CustomerMovePath(bool exit) {
     double deltaTime = Time::deltaTime;
 	if (this->pathPoints.size() > 0) { // se il percorso esiste
-		if (this->currentPathPoint < (int)this->pathPoints.size()) { // se non ho raggiunto l'ultima tappa
+		if (this->currentPathPoint < (int) this->pathPoints.size() ){ // se non ho raggiunto l'ultima tappa
 			glm::vec3 targetPoint = this->pathPoints[currentPathPoint]; // il target point equivale alla tappa relativa al currentPathPoint
 			if (!Utilities::CheckDistance(this->customerObject.Position, targetPoint, 0.1f)) { // Se non ha ancora raggiunto la tappa (per ora distanza minima 0.1f)
 				MoveTo(targetPoint, deltaTime); // si muove verso di essa
@@ -112,6 +113,7 @@ void Customer::SetPath(glm::vec3 wcPosition) {
 
 // VECCHI METODI PER MOVIMENTO SENZA PATH
 
+/*
 void Customer::CustomerMove(float deltaTime) {
 	if (!Utilities::CheckDistance(this->customerObject.Position, this->targetWc->wcObject.Position, 0.3f)) { // se non ha ancora raggiunto il wc
 		MoveTo(this->targetWc->wcObject.Position, deltaTime);
@@ -137,3 +139,5 @@ void Customer::CustomerExit(float deltaTime) {
 		this->currentState = CUSTOMER_WAIT;
 	}
 }
+
+*/
