@@ -97,7 +97,7 @@ int main()
         
         // processInput(window);
 
-        MyGame.ProcessInput();
+        //wMyGame.ProcessInput();
         MyGame.Update();
 
         // render

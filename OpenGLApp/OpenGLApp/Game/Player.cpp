@@ -97,6 +97,7 @@ void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
                 //game_score += 10.0f;
                 this->game->game_score +=10.0f;
                 this->WaterLevel -= 1;
+                this->game->CustomerManager->customerToServe--;
                 std::cout << WaterLevel << std::endl;
 
             }

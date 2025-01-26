@@ -6,6 +6,7 @@
 #include "game_level.h"
 #include "customers_manager.h"
 
+
 class Game {
 public:
     float game_score = 0.0f; // score momentaneo del gioco
@@ -14,7 +15,8 @@ public:
 	GameLevel* Level;
 	CustomersManager* CustomerManager;
 	RenderData renderData;
-
+    bool isGameOver;
+    
 	Game(unsigned int Width, unsigned int Height);
 
 	void Init(); // Metodo dove si inizializzano variabili, shader, texture ecc... e viene eseguito una singola volta

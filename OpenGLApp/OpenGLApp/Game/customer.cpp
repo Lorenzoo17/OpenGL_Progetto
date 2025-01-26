@@ -2,8 +2,9 @@
 #include "utilities.h"
 #include <algorithm>
 #include "time.h"
+#include "game.h"
 
-Customer::Customer(GameObject customer_object, glm::vec3 exit_position) {
+Customer::Customer(GameObject customer_object, glm::vec3 exit_position, Game* game): queuePos(0),patienceTime(75.0f), game(game){
 	this->customerObject = customer_object;
 	this->currentState = CUSTOMER_WAIT;
 	this->exitPosition = exit_position;
@@ -38,31 +39,60 @@ void Customer::CustomerBehaviour(float deltaTime) {
 
 
 void Customer::CustomerWait() {
-    glm::vec3 targetPoint = glm::vec3(-1.0f, 1.0f, 2.0f);
+    float offset = 1.5f;
+    glm::vec3 targetPoint = glm::vec3(-1.0f, 1.0f + offset * queuePos, 2.0f);
+    this->patienceTime -= Time::deltaTime;
+    
+    if(patienceTime <= 50.0f)
+    {
+        if(patienceTime <= 35.0f)
+        {
+            this->customerObject.Color = glm::vec3(0.38f, 0.11f, 0.11f); //rosso
+            if(patienceTime <= 0.0f)
+            {
+                this->game->isGameOver = true; //Game Over
+                ResourceManager::saveHighScore(this->game->game_score);
+            }
+        }else
+        {
+            this->customerObject.Color = glm::vec3(1.0f, 0.53f, 0.15f); //arancione
+        }
+    }
+    
+    
 	if (this->targetWc != nullptr) { // se c'e' un wc disponibile
 		this->startPosition = this->customerObject.Position;
-		this->currentState = CUSTOMER_MOVE_WC; // passo allo stato in cui si muove 
+		this->currentState = CUSTOMER_MOVE_WC; // passo allo stato in cui si muove
+        this->customerObject.Color = glm::vec3(1.0f); //resetta il colore
 	}
 	else { // Se non c'e' un wc disponibile
         this->startPosition = this->customerObject.Position;
-        MoveTo(targetPoint, Time::deltaTime); // si muove verso di essa
+        if (!Utilities::CheckDistance(this->customerObject.Position, targetPoint, 0.1f)) { // Se non ha ancora raggiunto la tappa (per ora distanza minima 0.1f)
+            MoveTo(targetPoint); // si muove verso di essa
+        }
 	}
 }
 
 void Customer::CustomerDirty() {
-	//printf("Sporcato"); // sporca
-	this->targetWc->MakeDirty(glm::vec3(0.5f, 0.4f, 0.3f)); // richiama metodo makedirty, per cambiare il colore al wc
-	this->currentState = CUSTOMER_EXIT; // esce
-	this->SetPath(exitPosition);
+    static float wait = 1;
+    if(wait <= 0)
+    {
+        this->targetWc->MakeDirty(glm::vec3(0.5f, 0.4f, 0.3f)); // richiama metodo makedirty, per cambiare il colore al wc
+        this->currentState = CUSTOMER_EXIT; // esce
+        this->SetPath(exitPosition);
+        wait = 1;
+    }else
+    {
+        wait -= Time::deltaTime;
+    }
 }
 
 void Customer::CustomerMovePath(bool exit) {
-    double deltaTime = Time::deltaTime;
 	if (this->pathPoints.size() > 0) { // se il percorso esiste
 		if (this->currentPathPoint < (int) this->pathPoints.size() ){ // se non ho raggiunto l'ultima tappa
 			glm::vec3 targetPoint = this->pathPoints[currentPathPoint]; // il target point equivale alla tappa relativa al currentPathPoint
 			if (!Utilities::CheckDistance(this->customerObject.Position, targetPoint, 0.1f)) { // Se non ha ancora raggiunto la tappa (per ora distanza minima 0.1f)
-				MoveTo(targetPoint, deltaTime); // si muove verso di essa
+				MoveTo(targetPoint); // si muove verso di essa
 			}
 			else { // se ha raggiunto la tappa
 				currentPathPoint++; // passa alla successiva
@@ -91,11 +121,11 @@ void Customer::CustomerMovePath(bool exit) {
 	}
 }
 
-void Customer::MoveTo(glm::vec3 targetPosition, float deltaTime) {
+void Customer::MoveTo(glm::vec3 targetPosition) {
 	glm::vec3 direction = targetPosition - this->customerObject.Position;
 	direction = Utilities::NormalizeVector(direction);
 
-	this->customerObject.Position += direction * this->customerObject.Speed * deltaTime;
+	this->customerObject.Position += direction * this->customerObject.Speed * (float)Time::deltaTime;
 }
 
 void Customer::SetPath(glm::vec3 wcPosition) {
@@ -108,6 +138,7 @@ void Customer::SetPath(glm::vec3 wcPosition) {
 	this->pathPoints.push_back(wcDoorPosition);
 	this->pathPoints.push_back(wcPosition);
 }
+
 
 
 

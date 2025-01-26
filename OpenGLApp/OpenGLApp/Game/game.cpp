@@ -4,10 +4,12 @@
 #include "Camera.h"
 #include "utilities.h"
 #include "customer.h"
-#include "Player.h"
 #include "time.h"
+#include "Player.h"
 
 //#include "text_renderer.h"
+
+
 
 void CleanWc(Wc* wc, float cleanDistance);
 
@@ -23,6 +25,7 @@ Camera* camera;
 glm::vec3 INITIAL_CAMERA_POSITION(0.0f, 0.0f, 8.0f);
 
 Player* player;
+
 //GameObject* Player;
 const glm::vec3 INITIAL_PLAYER_POSITION(0.0f, 0.0f, 3.0f);
 const float PLAYER_INITIAL_VELOCITY(3.5f);
@@ -40,15 +43,12 @@ float game_score = 0.0f; // score momentaneo del gioco
 // rendering della mappa tramite classe apposita GameLevel
 // rendering di scatole e interazione in process input : quasi, migliorare 
 
-Game::Game(unsigned int width, unsigned int height) : Width(width), Height(height) {
+Game::Game(unsigned int width, unsigned int height) : Width(width), Height(height), isGameOver(false) {
 
 };
 
 void Game::Init(){
-    
     ResourceManager::LoadAssets();
-    
-
     
 	// Si definisce la matrice di proiezione
 	glm::mat4 projection = glm::mat4(1.0f);
@@ -90,7 +90,8 @@ void Game::Init(){
 
 	// settaggio customer_manager
 	float customerSpawnRate = 2.0f; // per ora fisso
-    this->CustomerManager = new CustomersManager(customerSpawnRate, this->Level);
+    this->CustomerManager = new CustomersManager(customerSpawnRate, this);
+    
 
 	// Generazione customers statica
 	// creare customer_manager dove viene fatto da li
@@ -116,10 +117,12 @@ void Game::Render() {
 	// Necessario passare la matrice di vista per assegnarla prima della model
 	Level->Draw(renderData); // renderizzo componenti statici del livello, li renderizzo per primi in quanto li voglio sotto tutto il resto
 
+    
 	for (Customer& c : this->CustomerManager->customers_list) {
 		if (!c.customerObject.Destroyed)
 			c.customerObject.Draw(renderData);
 	}
+     
 
 	// Va renderizzato dopo per il blending (vedi glEnable(GL_BLEND) nel main), inoltre la posizione in z è 3.0f per averlo sopra tutto ma comunque sotto la camera (5.0f)
 	player->Draw(renderData); // Rendering del player, si attiva in automatico lo shader giusto e viene assegnata la texture corretta
@@ -131,23 +134,25 @@ void Game::Render() {
 }
 
 void Game::Update() {
-    
-    double deltaTime = Time::deltaTime;
-	camera->CameraFollow(player->Position); // Per camera che segue il player
-    //player->Idle(INITIAL_PLAYER_POSITION.z);
-	// aggiorno la matrice di vista e la assegno agli shader (NECESSARIO FARLO PRIMA DELLA MODEL, QUI NON VA BENE)
-	// ResourceManager::GetShader("base").SetMatrix4("view", camera->GetViewMatrix());
-	// ResourceManager::GetShader("base2").SetMatrix4("view", camera->GetViewMatrix());
-
-    
-    this->CustomerManager->updateBehaviour();
-     
-    // Pulizia dei wc del player
-    player->clean(0.2f, interactPressed);
-    // spawn dei customer (PER ORA NON CONTROLLATO)
-	this->CustomerManager->SpawnCustomers();
-	
-	DoCollisions();
+    if (!isGameOver){
+        ProcessInput();
+        camera->CameraFollow(player->Position); // Per camera che segue il player
+        //player->Idle(INITIAL_PLAYER_POSITION.z);
+        // aggiorno la matrice di vista e la assegno agli shader (NECESSARIO FARLO PRIMA DELLA MODEL, QUI NON VA BENE)
+        // ResourceManager::GetShader("base").SetMatrix4("view", camera->GetViewMatrix());
+        // ResourceManager::GetShader("base2").SetMatrix4("view", camera->GetViewMatrix());
+        
+        // spawn dei customer (PER ORA NON CONTROLLATO)
+        this->CustomerManager->SpawnCustomers();
+        this->CustomerManager->updateBehaviour();
+        
+        // Pulizia dei wc del player
+        player->clean(0.2f, interactPressed);
+        DoCollisions();
+    }else
+    {
+        //std::cout << "Game Over" << std::endl;
+    }
 }
 
 void Game::ProcessInput() {
@@ -171,8 +176,6 @@ void Game::ProcessInput() {
     interactPressed = this->Keys[GLFW_KEY_E];
     
 }
-
-
 
 void Game::DoCollisions() {
     

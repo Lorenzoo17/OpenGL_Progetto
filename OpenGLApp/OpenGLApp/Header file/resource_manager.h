@@ -39,11 +39,13 @@ public:
     static void LoadAssets();
 
     static void Clear();
+    
+    static void saveHighScore(int score);
 private:
 
     ResourceManager() { }
 
-    static Shader    loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
+    static Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
 
     static Texture2D loadTextureFromFile(const char* file, bool alpha);
 };
