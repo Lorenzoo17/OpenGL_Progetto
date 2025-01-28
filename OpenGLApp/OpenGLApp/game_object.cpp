@@ -14,9 +14,13 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, Texture2D sprite, float sp
     initRenderData();
 }
 
-GameObject::GameObject(glm::vec3 pos, glm::vec3 size, Model object_model, float speed, glm::vec3 color, glm::vec3 moveDirection)
-    : Position(pos), Size(size), MoveDirection(moveDirection), Color(color), Rotation(0.0f), ObjectModel(object_model), Speed(speed), IsSolid(false), Destroyed(false) {
+GameObject::GameObject(glm::vec3 pos, glm::vec3 rotation, glm::vec3 size,
+                       Model object_model, float speed, glm::vec3 color,glm::vec3 moveDirection)
+         :Position(pos), Rotation(rotation),Size(size), MoveDirection(moveDirection), Color(color),
+          ObjectModel(object_model), Speed(speed), IsSolid(false), Destroyed(false)
+{
     // initRenderData(); // per modello non devo creare quadVAO
+    //this->Rotation = glm::vec3(glm::radians(rotation.x),glm::radians(rotation.y), glm::radians(rotation.z));
     this->quadVAO = 0; // assegno VAO a 0
 }
 
@@ -62,7 +66,11 @@ void GameObject::Draw(RenderData renderData)
 
         // Le traslazioni sono per avere come origine il punto il alto a sinistra
         // model = glm::translate(model, glm::vec3(0.5f * this->Size.x, 0.5f * this->Size.y, 0.0f)); // move origin of rotation to center of quad
-        model = glm::rotate(model, this->Rotation, glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
+        /*
+        model = glm::rotate(model, this->Rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); // then rotate
+        model = glm::rotate(model, this->Rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)); // then rotate
+        model = glm::rotate(model, this->Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
+        */
         // model = glm::translate(model, glm::vec3(-0.5f * this->Size.x, -0.5f * this->Size.y, 0.0f)); // move origin back
 
         model = glm::scale(model, glm::vec3(this->Size)); // last scale
@@ -117,12 +125,20 @@ void GameObject::Draw(RenderData renderData)
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(this->Position));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
-
+        
         // Le traslazioni sono per avere come origine il punto il alto a sinistra
         // model = glm::translate(model, glm::vec3(0.5f * this->Size.x, 0.5f * this->Size.y, 0.0f)); // move origin of rotation to center of quad
        
-        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // then rotate
-        model = glm::rotate(model, this->Rotation, glm::vec3(0.0f, 1.0f, 0.0f)); // then rotate
+        //model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // then rotate
+        //model = glm::rotate(model, this->Rotation.z, glm::vec3(0.0f, 1.0f, 0.0f)); // then rotate
+        model = glm::rotate(model, glm::radians(this->Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // then rotate
+        model = glm::rotate(model, glm::radians(this->Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // then rotate
+        model = glm::rotate(model, glm::radians(this->Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
+        
+        
+        
+        
+        
         // model = glm::translate(model, glm::vec3(-0.5f * this->Size.x, -0.5f * this->Size.y, 0.0f)); // move origin back
 
         model = glm::scale(model, glm::vec3(this->Size)); // last scale
@@ -141,3 +157,6 @@ void GameObject::Destroy() {
         quadVAO = 0; // Imposta a 0 per evitare doppie eliminazioni
     }
 }
+
+
+

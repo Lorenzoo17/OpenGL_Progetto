@@ -35,13 +35,17 @@ public:
     static std::string LoadSound(const char* file, std::string name);
 
     static std::string GetSound(std::string name);
+    
+    static void LoadAssets();
 
-    static void      Clear();
+    static void Clear();
+    
+    static void saveHighScore(int score);
 private:
 
     ResourceManager() { }
 
-    static Shader    loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
+    static Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
 
     static Texture2D loadTextureFromFile(const char* file, bool alpha);
 };

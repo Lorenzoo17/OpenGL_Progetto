@@ -125,3 +125,58 @@ std::string ResourceManager::LoadSound(const char* file, std::string name) {
 std::string ResourceManager::GetSound(std::string name) {
     return Sounds[name];
 }
+
+void ResourceManager::LoadAssets()
+{
+    // Caricamento degli shader
+    ResourceManager::LoadShader("assets/shaders/shader.vs", "assets/shaders/shader.fs", nullptr, "base");
+    ResourceManager::LoadShader("assets/shaders/shader_3d.vs", "assets/shaders/shader_3d.fs", nullptr, "base3d");
+    ResourceManager::LoadShader("assets/shaders/shader_3d_simple_light.vs", "assets/shaders/shader_3d_simple_light.fs", nullptr, "base3d_light");
+    ResourceManager::LoadShader("assets/shaders/shader_3d_mult_light.vs", "assets/shaders/shader_3d_mult_light.fs", nullptr, "3d_mult_light");
+    
+    // Caricamento dei modelli 3D
+    ResourceManager::LoadModel("assets/models/robot/robot_1.obj", "robot1");
+    ResourceManager::LoadModel("assets/models/slime/slime.obj", "slime1");
+    ResourceManager::LoadModel("assets/models/wc/Gabinetto.obj", "wc");
+    ResourceManager::LoadModel("assets/models/floor/Piastrelle.obj", "floor");
+    ResourceManager::LoadModel("assets/models/walls/wall.obj", "wall");
+    ResourceManager::LoadModel("assets/models/env/Restrooms.obj", "room");
+    ResourceManager::LoadModel("assets/models/lamp/lampadina.obj", "lamp");
+    //ResourceManager::LoadModel("assets/models/pavimento/pavimento.obj", "lamp");
+    
+
+    // Caricamento delle texture
+    ResourceManager::LoadTexture("assets/textures/container.jpg", false, "cassa");
+    ResourceManager::LoadTexture("assets/textures/robot.png", true, "robot");
+    ResourceManager::LoadTexture("assets/textures/floor.png", true, "pavimento");
+    ResourceManager::LoadTexture("assets/textures/wall.png", true, "parete");
+    ResourceManager::LoadTexture("assets/textures/wc.png", true, "wc");
+    ResourceManager::LoadTexture("assets/textures/slime.png", true, "slime");
+
+    // Caricamento suoni
+    ResourceManager::LoadSound("assets/sounds/bell.mp3", "bell");
+    ResourceManager::LoadSound("assets/sounds/wipe_fast.mp3", "wipe_fast");
+    ResourceManager::LoadSound("assets/sounds/door_open.mp3", "door_open");
+   
+}
+
+void ResourceManager::saveHighScore(int score)
+{
+    int cmp = 0;
+    std::ifstream fileCont("saved_value.txt");
+        if (fileCont.is_open()) {
+            fileCont >> cmp;
+            fileCont.close();
+            
+            if (cmp < score)
+            {
+                std::ofstream fileDest("saved_value.txt");
+                fileDest << score;  // Scrive la variabile intera nel file
+                //fileDest << 0;  // Scrive la variabile intera nel file
+                fileDest.close();
+            }
+        }else {
+            std::cerr << "Impossibile aprire il file per il caricamento!" << std::endl;
+        }
+}
+

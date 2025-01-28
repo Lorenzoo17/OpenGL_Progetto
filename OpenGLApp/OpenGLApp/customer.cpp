@@ -1,8 +1,10 @@
 #include "customer.h"
 #include "utilities.h"
 #include <algorithm>
+#include "time.h"
+#include "game.h"
 
-Customer::Customer(GameObject customer_object, glm::vec3 exit_position) {
+Customer::Customer(GameObject customer_object, glm::vec3 exit_position, Game* game): queuePos(0),patienceTime(75.0f), game(game){
 	this->customerObject = customer_object;
 	this->currentState = CUSTOMER_WAIT;
 	this->exitPosition = exit_position;
@@ -13,48 +15,84 @@ Customer::Customer(GameObject customer_object, glm::vec3 exit_position) {
 }
 
 void Customer::CustomerBehaviour(float deltaTime) {
-	if (currentState == CUSTOMER_MOVE_WC) {
-		// CustomerMove(deltaTime);
-		bool isExit = false;
-		CustomerMovePath(deltaTime, isExit); // si muove verso il wc seguendo il path specificato
-	}
-	else if (currentState == CUSTOMER_DIRTY) {
-		CustomerDirty();
-	}
-	else if (currentState == CUSTOMER_EXIT) {
-		// CustomerExit(deltaTime);
-		bool isExit = true; // in uscita devo fare anche altre operazioni, quindi lo decido con booleano
-		CustomerMovePath(deltaTime, isExit); // si muove verso l'uscita seguendo il path reverse
-	}
-	else {
-		CustomerWait();
-	}
+    
+    bool isExit;
+    switch (currentState)
+    {
+        case CUSTOMER_MOVE_WC:
+            isExit = false;
+            CustomerMovePath(isExit); // si muove verso il wc seguendo il path specificato
+            break;
+        case CUSTOMER_DIRTY:
+            CustomerDirty();
+            break;
+        case CUSTOMER_EXIT:
+            isExit = true;
+            CustomerMovePath(isExit); // si muove verso il wc seguendo il path specificato
+            break;
+        default:
+            CustomerWait();
+            break;
+        
+    }
 }
 
+
 void Customer::CustomerWait() {
+    float offset = 1.5f;
+    glm::vec3 targetPoint = glm::vec3(-1.0f, 1.0f + offset * queuePos, 2.0f);
+    this->patienceTime -= Time::deltaTime;
+    
+    if(patienceTime <= 50.0f)
+    {
+        if(patienceTime <= 35.0f)
+        {
+            this->customerObject.Color = glm::vec3(0.38f, 0.11f, 0.11f); //rosso
+            if(patienceTime <= 0.0f)
+            {
+                this->game->isGameOver = true; //Game Over
+                ResourceManager::saveHighScore(this->game->game_score);
+            }
+        }else
+        {
+            this->customerObject.Color = glm::vec3(1.0f, 0.53f, 0.15f); //arancione
+        }
+    }
+    
+    
 	if (this->targetWc != nullptr) { // se c'e' un wc disponibile
 		this->startPosition = this->customerObject.Position;
-		this->currentState = CUSTOMER_MOVE_WC; // passo allo stato in cui si muove 
+		this->currentState = CUSTOMER_MOVE_WC; // passo allo stato in cui si muove
+        this->customerObject.Color = glm::vec3(1.0f); //resetta il colore
 	}
 	else { // Se non c'e' un wc disponibile
-		this->currentState = currentState;
-		this->customerObject.Position = this->customerObject.Position; // resta fermo
+        this->startPosition = this->customerObject.Position;
+        if (!Utilities::CheckDistance(this->customerObject.Position, targetPoint, 0.1f)) { // Se non ha ancora raggiunto la tappa (per ora distanza minima 0.1f)
+            MoveTo(targetPoint); // si muove verso di essa
+        }
 	}
 }
 
 void Customer::CustomerDirty() {
-	//printf("Sporcato"); // sporca
-	this->targetWc->MakeDirty(glm::vec3(0.5f, 0.4f, 0.3f)); // richiama metodo makedirty, per cambiare il colore al wc
-	this->currentState = CUSTOMER_EXIT; // esce
-	this->SetPath(exitPosition);
+    static float wait = 1;
+    if(wait <= 0)
+    {
+        this->targetWc->MakeDirty(glm::vec3(0.5f, 0.4f, 0.3f)); // richiama metodo makedirty, per cambiare il colore al wc
+        this->currentState = CUSTOMER_EXIT; // esce
+        this->SetPath(exitPosition);
+        wait = 1;
+    }else
+    {
+        wait -= Time::deltaTime;
+    }
 }
 
-void Customer::CustomerMovePath(float deltaTime, bool exit) {
+void Customer::CustomerMovePath(bool exit) {
 	if (this->pathPoints.size() > 0) { // se il percorso esiste
-		if (this->currentPathPoint < (int)this->pathPoints.size()) { // se non ho raggiunto l'ultima tappa
+		if (this->currentPathPoint < (int) this->pathPoints.size() ){ // se non ho raggiunto l'ultima tappa
 			glm::vec3 targetPoint = this->pathPoints[currentPathPoint]; // il target point equivale alla tappa relativa al currentPathPoint
 			if (!Utilities::CheckDistance(this->customerObject.Position, targetPoint, 0.1f)) { // Se non ha ancora raggiunto la tappa (per ora distanza minima 0.1f)
-				MoveTo(targetPoint, deltaTime); // si muove verso di essa
+				MoveTo(targetPoint); // si muove verso di essa
 			}
 			else { // se ha raggiunto la tappa
 				currentPathPoint++; // passa alla successiva
@@ -83,11 +121,11 @@ void Customer::CustomerMovePath(float deltaTime, bool exit) {
 	}
 }
 
-void Customer::MoveTo(glm::vec3 targetPosition, float deltaTime) {
+void Customer::MoveTo(glm::vec3 targetPosition) {
 	glm::vec3 direction = targetPosition - this->customerObject.Position;
 	direction = Utilities::NormalizeVector(direction);
 
-	this->customerObject.Position += direction * this->customerObject.Speed * deltaTime;
+	this->customerObject.Position += direction * this->customerObject.Speed * (float)Time::deltaTime;
 }
 
 void Customer::SetPath(glm::vec3 wcPosition) {
@@ -99,34 +137,4 @@ void Customer::SetPath(glm::vec3 wcPosition) {
 	this->pathPoints.push_back(startPosition);
 	this->pathPoints.push_back(wcDoorPosition);
 	this->pathPoints.push_back(wcPosition);
-}
-
-
-
-// VECCHI METODI PER MOVIMENTO SENZA PATH
-
-void Customer::CustomerMove(float deltaTime) {
-	if (!Utilities::CheckDistance(this->customerObject.Position, this->targetWc->wcObject.Position, 0.3f)) { // se non ha ancora raggiunto il wc
-		MoveTo(this->targetWc->wcObject.Position, deltaTime);
-	}
-	else {
-		this->currentState = CUSTOMER_DIRTY; // se ha raggiunto il wc lo sporca
-	}
-}
-
-
-void Customer::CustomerExit(float deltaTime) {
-	if (!Utilities::CheckDistance(this->customerObject.Position, this->exitPosition, 0.3f)) { // Se non ha ancora raggiunto l'uscita
-		MoveTo(this->exitPosition, deltaTime);
-	}
-	else {
-		this->customerObject.Destroyed = true; // per non renderizzarlo piu
-		this->targetWc->available = true; // libero il wc
-		this->targetWc = nullptr; // tolgo il wc dal riferimento, in modo poi eventualmente da poter riutilizzare il gameobject
-
-		this->pathPoints.clear();
-		currentPathPoint = 0;
-
-		this->currentState = CUSTOMER_WAIT;
-	}
 }

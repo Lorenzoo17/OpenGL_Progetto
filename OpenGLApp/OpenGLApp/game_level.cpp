@@ -9,53 +9,28 @@ void GameLevel::Load() {
 	//
 }
 
-void GameLevel::Draw(RenderData renderData) {
 
-	if (Room != nullptr) {
-		//Room->Draw(renderData);
-	}
-
-	if (Floor_3d != nullptr && Wall_3d != nullptr) {
-		Floor_3d->Draw(renderData);
-		Wall_3d->Draw(renderData);
-	}
-
-	if (this->toilets.size() > 0) {
-		for (Wc& wc : this->toilets) {
-			wc.wcObject.Draw(renderData);
-		}
-	}
-
-	if (this->lights.size() > 0) {
-		for (GameObject& l : lights) {
-			l.Draw(renderData);
-		}
-	}
-}
 
 void GameLevel::init() {
-	float unit_width = 1.0f; // in modo da unificare posizione e size, se modifico size modifico anche la posizione di conseguenza
-	float unit_height = 1.0f;
+	//float unit_width = 1.0f; // in modo da unificare posizione e size, se modifico size modifico anche la posizione di conseguenza
+	//float unit_height = 1.0f;
 
 	glm::vec3 offset = glm::vec3(-3.0f, -12.0f, 0.0f);
 
 	// Stanza
-	Room = new GameObject(glm::vec3(2.3f, -8.0f, -2.0f), glm::vec3(1.6f, 1.0f, 1.3f), ResourceManager::GetModel("room"));
+    Room = new GameObject(glm::vec3(2.3f, -8.0f, -2.0f), glm::vec3(0.0f,90.0f, 0.0f) ,glm::vec3(1.6f, 1.0f, 1.3f), ResourceManager::GetModel("room"));
 	Room->SetShader(ResourceManager::GetShader("3d_mult_light"));
-	Room->Rotation = glm::radians(90.0f);
-
-	// pavimento 3d
-
-	Floor_3d = new GameObject(glm::vec3(2.0f, -8.0f, -1.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("floor"));
+	
+    // pavimento 3d
+	Floor_3d = new GameObject(glm::vec3(2.0f, -8.0f, -1.0f), glm::vec3(90.0f,90.0f, 0.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("floor"));
 	Floor_3d->SetShader(ResourceManager::GetShader("3d_mult_light"));
-	Floor_3d->Rotation = glm::radians(90.0f);
-	// 
-	Wall_3d = new GameObject(glm::vec3(2.0f, -8.0f, -2.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("wall"));
+
+	
+	Wall_3d = new GameObject(glm::vec3(2.0f, -8.0f, -2.0f), glm::vec3(90.0f,90.0f, 0.0f), glm::vec3(2.0f, 1.0f, 1.5f), ResourceManager::GetModel("wall"));
 	Wall_3d->SetShader(ResourceManager::GetShader("3d_mult_light"));
-	Wall_3d->Rotation = glm::radians(90.0f);
+
 
 	// Generazione wc
-
 	float wc_unit_width = 2.0f;
 	float wc_unit_height = 2.0f;
 	float z_offset = 1.0f; 
@@ -74,8 +49,9 @@ void GameLevel::init() {
 		
 		// wc 3d
 		glm::vec3 wc_3d_pos(position.x - 1.0f, position.y, 2.0f);
-		GameObject wc(wc_3d_pos, glm::vec3(1.0f), ResourceManager::GetModel("wc"));
-		wc.Rotation = glm::radians(0.0f);
+		GameObject wc(wc_3d_pos, glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(1.0f), ResourceManager::GetModel("wc"));
+		//wc.Rotation.z = glm::radians(0.0f);
+        
 		wc.SetShader(ResourceManager::GetShader("3d_mult_light"));
 
 		this->toilets.push_back(Wc(wc)); // creo istanza Wc e li assegno il gameobject e lo metto nella lista di wc
@@ -105,8 +81,32 @@ void GameLevel::init() {
 
 	for (int i = 0; i < n_lights; i++) {
 		// Per ora metto come texture slime, volendo pero si possono anche non renderizzare, tanto conta solo la posizione
-		GameObject newLight(lightsPositions[i], glm::vec3(0.3f), ResourceManager::GetModel("lamp"), 0.0f, lightsColors[i]);
+		GameObject newLight(lightsPositions[i], glm::vec3(0.0f), glm::vec3(0.3f), ResourceManager::GetModel("lamp"), 0.0f, lightsColors[i]);
 		newLight.SetShader(ResourceManager::GetShader("3d_mult_light")); // shader base
 		this->lights.push_back(newLight);
 	}
+}
+
+void GameLevel::Draw(RenderData renderData) {
+
+    if (Room != nullptr) {
+        //Room->Draw(renderData);
+    }
+
+    if (Floor_3d != nullptr && Wall_3d != nullptr) {
+        Floor_3d->Draw(renderData);
+        Wall_3d->Draw(renderData);
+    }
+
+    if (this->toilets.size() > 0) {
+        for (Wc& wc : this->toilets) {
+            wc.wcObject.Draw(renderData);
+        }
+    }
+
+    if (this->lights.size() > 0) {
+        for (GameObject& l : lights) {
+            l.Draw(renderData);
+        }
+    }
 }
