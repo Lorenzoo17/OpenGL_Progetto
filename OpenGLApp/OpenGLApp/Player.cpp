@@ -121,7 +121,7 @@ void Player::clean(float cleanDistance, bool interactPressed)
 
 void Player::upadateStreak()
 {
-    
+    static bool speedMode;
     
     static float initialSpeedModetime = 4;
     static float speedModetime = 4;
@@ -131,31 +131,37 @@ void Player::upadateStreak()
     
     
     
-    if (streak >= 1) //lavora solo se il player ha pulito almeno un gabinetto
-    {
-        streakTime -= Time::deltaTime;
-        if(streakTime <= 0)
+    if(!speedMode){
+        if (streak >= 1) //lavora solo se il player ha pulito almeno un gabinetto
         {
-            streak = 0; //resetta la streak
-            streakTime = initialStreakTime; //resetta il timer
-        }else
-        {   if (streak >= 4)
+            streakTime -= Time::deltaTime;
+            if(streakTime <= 0)
             {
                 streak = 0; //resetta la streak
+                streakTime = initialStreakTime; //resetta il timer
+            }else
+            {   if (streak >= 4)
+            {
+                speedMode = true;
                 this->Color = glm::vec3(0.6f, 0.2f , 0.1f);
                 speedModetime = initialSpeedModetime;
                 oldspeed = this->Speed;
                 this->Speed = 5;
             }
-                
+            }
         }
-    }
-    
+    }else{
     speedModetime -= Time::deltaTime;
     if(speedModetime <= 0)
     {
         this->Color = glm::vec3(1.0f); //ripristina la velocità del player
         speedModetime = initialSpeedModetime; //resetta il timer
         this->Speed = oldspeed;
+        streak = 0; //resetta la streak
+        speedMode = false;
     }
+    }
+    
+    
+    
 }
