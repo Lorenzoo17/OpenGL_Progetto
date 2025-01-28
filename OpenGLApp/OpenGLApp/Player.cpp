@@ -7,7 +7,7 @@
 
 Player::Player(glm::vec3 pos, glm::vec3 rotation, glm::vec3 size, Model object_model, float speed, glm::vec3 color,
                glm::vec3 moveDirection , int MaxWater,    Game* game):
-GameObject(pos, rotation,  size,  object_model, speed ,  color, moveDirection), MaxWaterLevel(MaxWater), WaterLevel(MaxWater), game(game), Level(game->Level),speedReached(0.0f), canMove(true), initialStreakTime(6), streakTime(6), streak(0), speedModetime(4), initialSpeedModetime(4){}
+GameObject(pos, rotation,  size,  object_model, speed ,  color, moveDirection), MaxWaterLevel(MaxWater), WaterLevel(MaxWater), game(game), Level(game->Level),speedReached(0.0f), canMove(true), initialStreakTime(6), streakTime(6), streak(0){}
 
 
 
@@ -113,15 +113,23 @@ void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
 void Player::clean(float cleanDistance, bool interactPressed)
 {
     for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
-        CleanWc(&wc, 0.2f, interactPressed);
+        if(wc.isDirty)
+            CleanWc(&wc, 0.2f, interactPressed);
     }
 
 }
 
 void Player::upadateStreak()
 {
-    std::cout << "speed:" << this->Speed << std::endl;
+    
+    
+    static float initialSpeedModetime = 4;
+    static float speedModetime = 4;
+    
+    
     static float oldspeed = this->Speed;
+    
+    
     
     if (streak >= 1) //lavora solo se il player ha pulito almeno un gabinetto
     {

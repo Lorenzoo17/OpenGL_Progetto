@@ -15,7 +15,7 @@ private:
     float speedReached;
     bool canMove;
     int streak;
-    float streakTime, initialStreakTime, speedModetime, initialSpeedModetime;
+    float streakTime, initialStreakTime;
     
 public:
     Player(glm::vec3 pos, glm::vec3 rotation, glm::vec3 size, Model object_model, float speed = 0.0f, glm::vec3 color = glm::vec3(1.0f), glm::vec3 moveDirection = glm::vec3(0.0f), int MaxWater = 10.0f, Game* game = NULL);
