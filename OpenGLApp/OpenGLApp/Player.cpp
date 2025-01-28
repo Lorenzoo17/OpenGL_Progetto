@@ -142,6 +142,8 @@ void Player::upadateStreak()
             }else
             {   if (streak >= 4)
             {
+                
+                streak = 0; //resetta la streak
                 speedMode = true;
                 this->Color = glm::vec3(0.6f, 0.2f , 0.1f);
                 speedModetime = initialSpeedModetime;
@@ -151,15 +153,14 @@ void Player::upadateStreak()
             }
         }
     }else{
-    speedModetime -= Time::deltaTime;
-    if(speedModetime <= 0)
-    {
-        this->Color = glm::vec3(1.0f); //ripristina la velocità del player
-        speedModetime = initialSpeedModetime; //resetta il timer
-        this->Speed = oldspeed;
-        streak = 0; //resetta la streak
-        speedMode = false;
-    }
+        speedModetime -= Time::deltaTime;
+        if(speedModetime <= 0)
+        {
+            this->Color = glm::vec3(1.0f); //ripristina la velocità del player
+            speedModetime = initialSpeedModetime; //resetta il timer
+            this->Speed = oldspeed;
+            speedMode = false;
+        }
     }
     
     
