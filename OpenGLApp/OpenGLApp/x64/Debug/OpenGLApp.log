@@ -1,0 +1,43 @@
+﻿  customer.cpp
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customer.cpp(44,33): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customer.cpp(54,58): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customer.cpp(86,23): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
+  customers_manager.cpp
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customers_manager.cpp(38,31): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customers_manager.cpp(108,47): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
+  game.cpp
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Camera.h(82,20): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
+  (compilazione del file di origine 'game.cpp')
+  
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\game.cpp(164,50): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\game.cpp(169,51): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\game.cpp(172,51): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\game.cpp(175,50): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
+  game_level.cpp
+  game_object.cpp
+  main.cpp
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Camera.h(82,20): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
+  (compilazione del file di origine 'main.cpp')
+  
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\main.cpp(94,33): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\main.cpp(95,21): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+  Player.cpp
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244: '=': conversione da 'double' a 'T'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244:         with
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244:         [
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244:             T=float
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244:         ]
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(37,35): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(52,26): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
+  resource_manager.cpp
+  shader.cpp
+  stb_image.cpp
+  texture.cpp
+  text_renderer.cpp
+  Time.cpp
+  utilities.cpp
+  wc.cpp
+  Generazione del codice in corso...
+  glad.c
+LINK : warning LNK4098: la libreria predefinita 'MSVCRT' è in conflitto con l'utilizzo di altre librerie; usare /NODEFAULTLIB:libreria
+  OpenGLApp.vcxproj -> C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\x64\Debug\OpenGLApp.exe

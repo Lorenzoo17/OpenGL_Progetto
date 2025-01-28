@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include "Player.h"
 #include "utilities.h"
 #include <cmath>
