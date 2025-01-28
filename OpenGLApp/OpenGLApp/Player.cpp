@@ -25,12 +25,7 @@ void Player::Move(glm::vec3 direction, float deltaTime)
 {
     static float angle;
     static float counter = waitTime;
-    /*
-    if(speedReached < 1)
-    {
-        speedReached = sin(deltaTime);
-    }
-    */
+
     if(canMove)
     {
         if (glm::length(direction) > 0.0f) {
@@ -54,7 +49,8 @@ void Player::Move(glm::vec3 direction, float deltaTime)
     {
         //disiabilita il movimento del player per un breve periodo per poi riabilitarlo
         counter -= Time::deltaTime;
-        if (counter <= 0){counter = waitTime; canMove = true;}
+        if (counter <= 0)
+            counter = waitTime; canMove = true;
     }
 }
 

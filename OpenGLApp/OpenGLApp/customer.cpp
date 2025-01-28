@@ -138,37 +138,3 @@ void Customer::SetPath(glm::vec3 wcPosition) {
 	this->pathPoints.push_back(wcDoorPosition);
 	this->pathPoints.push_back(wcPosition);
 }
-
-
-
-
-// VECCHI METODI PER MOVIMENTO SENZA PATH
-
-/*
-void Customer::CustomerMove(float deltaTime) {
-	if (!Utilities::CheckDistance(this->customerObject.Position, this->targetWc->wcObject.Position, 0.3f)) { // se non ha ancora raggiunto il wc
-		MoveTo(this->targetWc->wcObject.Position, deltaTime);
-	}
-	else {
-		this->currentState = CUSTOMER_DIRTY; // se ha raggiunto il wc lo sporca
-	}
-}
-
-
-void Customer::CustomerExit(float deltaTime) {
-	if (!Utilities::CheckDistance(this->customerObject.Position, this->exitPosition, 0.3f)) { // Se non ha ancora raggiunto l'uscita
-		MoveTo(this->exitPosition, deltaTime);
-	}
-	else {
-		this->customerObject.Destroyed = true; // per non renderizzarlo piu
-		this->targetWc->available = true; // libero il wc
-		this->targetWc = nullptr; // tolgo il wc dal riferimento, in modo poi eventualmente da poter riutilizzare il gameobject
-
-		this->pathPoints.clear();
-		currentPathPoint = 0;
-
-		this->currentState = CUSTOMER_WAIT;
-	}
-}
-
-*/

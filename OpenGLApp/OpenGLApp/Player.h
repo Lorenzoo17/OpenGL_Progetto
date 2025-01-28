@@ -10,7 +10,7 @@ class Player : public GameObject {
 private:
     int MaxWaterLevel;
     int WaterLevel;
-    GameLevel* Level;
+    GameLevel* Level; //da toglioere
     Game* game;
     float speedReached;
     bool canMove;

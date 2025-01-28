@@ -98,7 +98,7 @@ void Game::Init(){
 	// se ce n'e' destroyed si riabilitano se no se ne spawnano nuovi -> si raggiunge regime dove non se ne spawnano piu
 
 	// settaggio luce effettuato in gameLevel.cpp
-	// Assegno posizione e colori delle luci (fisse)
+	// Assegno posizione e colori delle luci (fisse)a
 	// luci renderizzate in game_level.cpp
 	for (int i = 0; i < this->Level->lights.size(); i++) {
 		renderData.lightPositions.push_back(this->Level->lights[i].Position);
@@ -148,10 +148,11 @@ void Game::Update() {
         
         // Pulizia dei wc del player
         player->clean(0.2f, interactPressed);
-        DoCollisions();
+        DoCollisions(); //togli
     }else
     {
         //std::cout << "Game Over" << std::endl;
+        //high score
     }
 }
 

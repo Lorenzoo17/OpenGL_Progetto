@@ -37,9 +37,6 @@ void CustomersManager::SpawnCustomers() {
     else {
         timeBtwSpawn -= Time::deltaTime; // per ora 0.1
     }
-            
-      
-    
     DespawnCustomer(); // Despawno il top della lista
     
     /*

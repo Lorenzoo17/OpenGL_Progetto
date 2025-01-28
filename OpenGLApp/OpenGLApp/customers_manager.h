@@ -23,7 +23,7 @@ public:
     int queueLenght;
     int total_spawned;
     
-    int customersWaves[10] = {8, 1, 2, 3 , 5, 7, 8, 8, 9};
+    int customersWaves[10] = {1, 1, 2, 3 , 5, 7, 8, 8, 9};
     int customerToServe;
     
     float spawnRateTime;
