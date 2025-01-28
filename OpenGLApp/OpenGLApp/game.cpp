@@ -148,6 +148,7 @@ void Game::Update() {
         
         // Pulizia dei wc del player
         player->clean(0.2f, interactPressed);
+        player->upadateStreak();
         DoCollisions(); //togli
     }else
     {

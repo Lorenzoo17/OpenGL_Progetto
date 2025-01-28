@@ -7,11 +7,11 @@
 
 Player::Player(glm::vec3 pos, glm::vec3 rotation, glm::vec3 size, Model object_model, float speed, glm::vec3 color,
                glm::vec3 moveDirection , int MaxWater,    Game* game):
-GameObject(pos, rotation,  size,  object_model, speed ,  color, moveDirection), MaxWaterLevel(MaxWater), WaterLevel(MaxWater), game(game), Level(game->Level),speedReached(0.0f), canMove(true){}
+GameObject(pos, rotation,  size,  object_model, speed ,  color, moveDirection), MaxWaterLevel(MaxWater), WaterLevel(MaxWater), game(game), Level(game->Level),speedReached(0.0f), canMove(true), initialStreakTime(6), streakTime(6), streak(0), speedModetime(4), initialSpeedModetime(4){}
 
 
 
-float waitTime = 1;
+float waitTime = 0.6f;
 
 
 void Player::Idle(float initialPos)
@@ -27,6 +27,7 @@ void Player::Move(glm::vec3 direction, float deltaTime)
     static float angle;
     static float counter = waitTime;
 
+    
     if(canMove)
     {
         if (glm::length(direction) > 0.0f) {
@@ -51,7 +52,11 @@ void Player::Move(glm::vec3 direction, float deltaTime)
         //disiabilita il movimento del player per un breve periodo per poi riabilitarlo
         counter -= Time::deltaTime;
         if (counter <= 0)
-            counter = waitTime; canMove = true;
+        {
+            counter = waitTime;
+            canMove = true;
+        }
+            
     }
 }
 
@@ -96,7 +101,8 @@ void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
                 this->WaterLevel -= 1;
                 this->game->CustomerManager->customerToServe--;
                 std::cout << WaterLevel << std::endl;
-
+                streak++;   //incrementa la streak
+                streakTime += 3/4 * initialStreakTime; //da un piccolo vantaggio di tempo
             }
             wc->Clean();
             canMove = false;
@@ -110,4 +116,38 @@ void Player::clean(float cleanDistance, bool interactPressed)
         CleanWc(&wc, 0.2f, interactPressed);
     }
 
+}
+
+void Player::upadateStreak()
+{
+    std::cout << "speed:" << this->Speed << std::endl;
+    static float oldspeed = this->Speed;
+    
+    if (streak >= 1) //lavora solo se il player ha pulito almeno un gabinetto
+    {
+        streakTime -= Time::deltaTime;
+        if(streakTime <= 0)
+        {
+            streak = 0; //resetta la streak
+            streakTime = initialStreakTime; //resetta il timer
+        }else
+        {   if (streak >= 4)
+            {
+                streak = 0; //resetta la streak
+                this->Color = glm::vec3(0.6f, 0.2f , 0.1f);
+                speedModetime = initialSpeedModetime;
+                oldspeed = this->Speed;
+                this->Speed = 5;
+            }
+                
+        }
+    }
+    
+    speedModetime -= Time::deltaTime;
+    if(speedModetime <= 0)
+    {
+        this->Color = glm::vec3(1.0f); //ripristina la velocità del player
+        speedModetime = initialSpeedModetime; //resetta il timer
+        this->Speed = oldspeed;
+    }
 }

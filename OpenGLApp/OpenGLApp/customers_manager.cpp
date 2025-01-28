@@ -19,6 +19,11 @@ void CustomersManager::SpawnCustomers() {
     static int index = 0;
     static int customersToSpawn = 0;
     static float customerSpeed = 0.6f;
+    
+    static float initialWaitTime = 12.0f; //tempo tra le ondate
+    static float waitTime = initialWaitTime; //tempo contatore attuale
+    
+    /*
     if(this->customerToServe <= 0)
     {
         this->customerToServe = customersWaves[index];
@@ -26,7 +31,19 @@ void CustomersManager::SpawnCustomers() {
         index = (index < 9) ? index+1 : index; //incrementa l'indice solo fino all'ultima ondata
         customerSpeed = (index > 6) ? customerSpeed : 0.8f; //incrementa la velocita dopo il sesto round
         
+    }*/
+    waitTime -= Time::deltaTime; //fa scorrere il tempo
+    if(waitTime <= 0 || this->customerToServe <= 0)   //verifica che sia scaduto il tempo o che sia stata ripulita l'ondata
+    {
+        this->customerToServe += customersWaves[index]; //aggiunge i nuovi clienti alla lista di customer da servire
+        customersToSpawn += customersWaves[index];      //aggiunge i nuovi clienti alla lista di customer da spownare
+        index = (index < 9) ? index+1 : index;          //incrementa l'indice solo fino all'ultima ondata
+        customerSpeed = (index > 6) ? customerSpeed : 0.8f; //incrementa la velocita dopo il sesto round
+        waitTime = initialWaitTime;                     // resetta il tempo
+        
     }
+    
+    
     
     if (this->timeBtwSpawn <= 0 && customersToSpawn > 0) { // ogni spawnRateTime
         Spawn(customerSpeed); // spawno nuovo customer
