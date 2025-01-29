@@ -77,3 +77,15 @@ glm::vec2 Utilities::worldToScreen(glm::vec3 worldPos, glm::mat4 view, glm::mat4
 
     return screenPos;
 }
+
+bool Utilities::clickOverObject(glm::vec3 gameObjectPos, glm::vec2 mousePosition, glm::mat4 view, glm::mat4 projection, int screenWidth, int screenHeight, float distance) {
+    glm::vec2 objectPos = worldToScreen(gameObjectPos, view, projection, screenWidth, screenHeight);
+    glm::vec3 objectScreenPosition = glm::vec3(objectPos.x, objectPos.y, 0.0f);
+    glm::vec3 mouseScreenPosition = glm::vec3(mousePosition.x, mousePosition.y, 0.0f);
+
+    if (CheckDistance(mouseScreenPosition, objectScreenPosition, distance)) {
+        return true;
+    }
+
+    return false;
+}

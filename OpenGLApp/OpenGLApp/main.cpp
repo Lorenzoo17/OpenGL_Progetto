@@ -99,7 +99,7 @@ int main()
         lastFrame = currentTime;
         Time::setDeltatime(deltaTime);
         
-        // processInput(window);
+        processInput(window);
 
         //wMyGame.ProcessInput();
         MyGame.Update();
@@ -128,6 +128,12 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
+        MyGame.mouseLeftClick = true;
+    }
+    else {
+        MyGame.mouseLeftClick = false;
+    }
     // if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     //    glfwSetWindowShouldClose(window, true);
 }

@@ -12,6 +12,7 @@ public:
     float game_score = 0.0f; // score momentaneo del gioco
 	unsigned int Width, Height; // Dimensioni dello schermo
 	bool Keys[1024];
+	bool mouseLeftClick;
 	glm::vec2 mousePosition;
 	GameLevel* Level;
 	CustomersManager* CustomerManager;
