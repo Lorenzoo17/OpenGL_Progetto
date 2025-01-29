@@ -3,10 +3,14 @@
 //ISoundEngine* SoundEngine = createIrrKlangDevice();
 
 bool Utilities::CheckDistance(glm::vec3 v1, glm::vec3 v2, float distance) {
-	if (sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) < distance)) {
+    
+	if (sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2)) <= distance) {
 		return true;
 	}
+    
 	return false;
+    
+    //return (sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) <= distance));
 }
 
 glm::vec3 Utilities::NormalizeVector(glm::vec3 v) {
@@ -83,9 +87,10 @@ bool Utilities::clickOverObject(glm::vec3 gameObjectPos, glm::vec2 mousePosition
     glm::vec3 objectScreenPosition = glm::vec3(objectPos.x, objectPos.y, 0.0f);
     glm::vec3 mouseScreenPosition = glm::vec3(mousePosition.x, mousePosition.y, 0.0f);
 
+    
     if (CheckDistance(mouseScreenPosition, objectScreenPosition, distance)) {
         return true;
     }
-
+    
     return false;
 }

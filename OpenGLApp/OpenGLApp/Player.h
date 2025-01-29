@@ -33,8 +33,8 @@ public:
     void Idle(float initialPos);
     void Move(glm::vec3 direction, float deltaTime);
     void collision();
-    void CleanWc(Wc* wc, float cleanDistance, bool interactPressed);
-    void clean(float cleanDistance, bool interactPressed);
+    void CleanWc(Wc* wc, bool interactPressed);
+    void clean(bool interactPressed);
     void CheckPoop();
     void upadateStreak();
     void waterRefill();

@@ -12,6 +12,7 @@ GameObject(pos, rotation,  size,  object_model, speed ,  color, moveDirection), 
 
 
 float waitTime = 0.6f;
+bool speedMode = false;
 
 
 void Player::Idle(float initialPos)
@@ -91,8 +92,8 @@ void Player::collision() {
 
 
 
-void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
-    if (Utilities::CheckDistance(this->Position, wc->wcObject.Position, 2.0f)) {
+void Player::CleanWc(Wc* wc, bool interactPressed) {
+    if (Utilities::CheckDistance(this->Position, wc->wcObject.Position, 1.2f)) {
         if (interactPressed) {
             if (wc->isDirty) {
                 Utilities::PlaySound("wipe_fast");
@@ -109,19 +110,20 @@ void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
     }
 }
 
-void Player::clean(float cleanDistance, bool interactPressed)
+void Player::clean( bool interactPressed)
 {
     std::cout << WaterLevel << std::endl;
     for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
         if(wc.isDirty)
             if(WaterLevel > 0) // non si possono pulire i bagni senza acquas
-                CleanWc(&wc, 0.2f, interactPressed);
+                CleanWc(&wc, interactPressed);
     }
     //waterRefill();
 }
 
 void Player::CheckPoop() { // Eseguito in Update
-    if (!poopMalus) {
+    
+    if (!poopMalus && !speedMode) {
         float interactPoopDistance = 1.0f;
         float stepOnPoopDistance = 0.3f;
 
@@ -173,7 +175,6 @@ void Player::CheckPoop() { // Eseguito in Update
 
 void Player::upadateStreak()
 {
-    static bool speedMode;
     
     static float initialSpeedModetime = 4;
     static float speedModetime = 4;
@@ -220,13 +221,13 @@ void Player::upadateStreak()
 
 void Player::waterRefill()
 {
-    static float initialWaitTime = 1;
-    static float waitTime = 1;
+    static float initialWaitTime = 0.5;
+    static float waitTime = 0.5;
     
     waitTime -= Time::deltaTime;
     if (waitTime <= 0)
     {
-        if(Utilities::CheckDistance(this->Position, Level->Mocio->Position, 6.0f))
+        if(Utilities::CheckDistance(this->Position, Level->Mocio->Position, 2.6f))
         {
             this->WaterLevel = (WaterLevel < MaxWaterLevel) ? WaterLevel + 1: WaterLevel; //incrementa l'acqua solo se è minore del livello massimo
             waitTime = initialWaitTime;

@@ -148,15 +148,15 @@ void Game::Update() {
         this->CustomerManager->updateBehaviour();
         
         // Pulizia dei wc del player
-        player->clean(0.2f, interactPressed);
+        player->clean(interactPressed);
         player->upadateStreak();
         player->CheckPoop(); // si controlla interazione con poops
         DoCollisions(); //togli
 
+        
+        printf("%f\n" ,sqrt(pow((Level->Mocio->Position.x - player->Position.x), 2) + pow((Level->Mocio->Position.y - player->Position.y), 2)));
         // glm::vec2 posizioneSchermowc = Utilities::worldToScreen(this->Level->toilets[0].wcObject.Position, camera->GetViewMatrix(), projection, Width, Height);
-
         // if (Utilities::CheckDistance(glm::vec3(mousePosition.x, mousePosition.y, 0.0f), glm::vec3(posizioneSchermowc.x, posizioneSchermowc.y, 0.0f), 100.0f)) {
-            
         // }
     }else
     {
@@ -186,7 +186,7 @@ void Game::ProcessInput() {
     interactPressed = this->Keys[GLFW_KEY_E];
     
     if (mouseLeftClick) {
-        if (Utilities::clickOverObject(this->Level->Mocio->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 100.0f)) {
+        if (Utilities::clickOverObject(this->Level->Mocio->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 50.0f)) {
             player->waterRefill();
         }
     }

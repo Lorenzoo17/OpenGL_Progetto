@@ -101,9 +101,9 @@ int main()
         
         processInput(window);
 
+        
         //wMyGame.ProcessInput();
         MyGame.Update();
-
         // render
         // ------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
