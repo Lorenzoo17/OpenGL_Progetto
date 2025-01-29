@@ -119,6 +119,60 @@ void Player::clean(float cleanDistance, bool interactPressed)
 
 }
 
+void Player::CheckPoop() { // Eseguito in Update
+    if (!poopMalus) {
+        float interactPoopDistance = 1.0f;
+        float stepOnPoopDistance = 0.3f;
+
+        auto& poops = this->game->Level->poopList;
+        int i = 0;
+
+        while (i < poops.size()) {
+            bool stepOn = Utilities::CheckDistance(poops[i].Position, this->Position, stepOnPoopDistance);
+            bool interact = Utilities::CheckDistance(poops[i].Position, this->Position, interactPoopDistance);
+
+            if (stepOn || (interact && this->game->Keys[GLFW_KEY_E])) { // se calpesto o mi avvicino molto premendo E
+                poops[i].Destroyed = true;
+                poops[i].Destroy();
+
+                if (stepOn) {
+                    poopMalus = true;
+                    poopMalusCurrentTime = poopMalusTime;
+                    this->Speed -= poopMalusModifier; // decremento velocita'
+                }
+                else {
+                    this->game->game_score += 5;
+                }
+
+                // scambio elemento con ultimo e faccio per rimuoverlo
+                if (i != poops.size() - 1) {
+                    std::swap(poops[i], poops.back());
+                }
+                poops.pop_back();
+
+
+            }
+            else {
+                // se sono a distanza per poter interagire coloro per avvisare del pericolo, se mi allontano torna a colore iniziale
+                poops[i].Color = interact ? glm::vec3(1.0f, 0.0f, 0.0f) : glm::vec3(1.0f, 1.0f, 1.0f);
+                i++;
+            }
+        }
+    }
+
+    // Se il malus di velocita' è attivo la velocita' viene ripristinata dopo poopMalusTime secondi
+    if (poopMalus) {
+        if (poopMalusCurrentTime <= 0) {
+            poopMalus = false;
+            this->Speed += poopMalusModifier;
+            poopMalusCurrentTime = poopMalusTime;
+        }
+        else {
+            poopMalusCurrentTime -= Time::deltaTime;
+        }
+    }
+}
+
 void Player::upadateStreak()
 {
     static bool speedMode;
@@ -129,7 +183,7 @@ void Player::upadateStreak()
     
     static float oldspeed = this->Speed;
     
-    
+    // printf("Streak : %d\n", streak);
     
     if(!speedMode){
         if (streak >= 1) //lavora solo se il player ha pulito almeno un gabinetto

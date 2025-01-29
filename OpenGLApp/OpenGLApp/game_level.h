@@ -15,6 +15,7 @@ public:
 	GameObject* Floor_3d;
 	GameObject* Wall_3d;
     GameObject* Mocio;
+	std::vector<GameObject> poopList = std::vector<GameObject>(); // lista delle poops spawnate dai customers
 
 	GameLevel(); // costruttore
     

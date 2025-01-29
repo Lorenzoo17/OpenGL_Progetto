@@ -109,4 +109,10 @@ void GameLevel::Draw(RenderData renderData) {
             l.Draw(renderData);
         }
     }
+
+	for (GameObject& p : this->poopList) {
+		if (!p.Destroyed) {
+			p.Draw(renderData);
+		}
+	}
 }

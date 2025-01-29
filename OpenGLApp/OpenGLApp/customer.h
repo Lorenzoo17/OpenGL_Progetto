@@ -33,6 +33,9 @@ public:
 	int currentPathPoint; // indice che si resetta quando in stato wait
 	glm::vec3 startPosition;
 
+	int poopRate; // rate casuale di spawn delle poop
+	bool hasSpawnedPoop; // Spawna la poop una volta e basta casualmente nel tragitto
+
 	Customer(GameObject customer_object, glm::vec3 exit_position, Game* game); // costruttore dove si va a creare il gameObject relativo
     
 	void CustomerBehaviour(float deltaTime); // Da eseguire in update, gestisce la logica dell'AI
@@ -44,6 +47,8 @@ private:
 	void CustomerDirty(); // Sporca il wc 
 	void CustomerExit(float deltaTime); // Si muove verso uscita
 	void MoveTo(glm::vec3 targetPosition); // metodo per il movimento
+
+	void MakePoop();
 };
 #endif // !CUSTOMER_H
 
