@@ -26,6 +26,7 @@ public:
 	static Collision CheckCollision(GameObject& one, GameObject& two);
 	static void PlaySound(std::string soundName);
 	static Direction VectorDirection(glm::vec3 target);
+	static glm::vec2 worldToScreen(glm::vec3 worldPos, glm::mat4 view, glm::mat4 projection, int screenWidth, int screenHeight);
 };
 
 #endif // !UTILITIES_H

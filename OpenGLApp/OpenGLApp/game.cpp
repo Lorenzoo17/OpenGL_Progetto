@@ -39,6 +39,7 @@ float timeBtw = 2.0f;
 float wcDirtyRate = 2.0f;
 
 float game_score = 0.0f; // score momentaneo del gioco
+glm::mat4 projection;
 
 // rendering della mappa tramite classe apposita GameLevel
 // rendering di scatole e interazione in process input : quasi, migliorare 
@@ -51,7 +52,7 @@ void Game::Init(){
     ResourceManager::LoadAssets();
     
 	// Si definisce la matrice di proiezione
-	glm::mat4 projection = glm::mat4(1.0f);
+	projection = glm::mat4(1.0f);
 	float cameraDistance = 5.0f;
 	float aspect = (float)this->Width / this->Height;
 	//projection = glm::ortho(-aspect * cameraDistance, aspect * cameraDistance, -1.0f * cameraDistance, 1.0f * cameraDistance, 0.1f, 100.0f);
@@ -151,6 +152,12 @@ void Game::Update() {
         player->upadateStreak();
         player->CheckPoop(); // si controlla interazione con poops
         DoCollisions(); //togli
+
+        // glm::vec2 posizioneSchermowc = Utilities::worldToScreen(this->Level->toilets[0].wcObject.Position, camera->GetViewMatrix(), projection, Width, Height);
+
+        // if (Utilities::CheckDistance(glm::vec3(mousePosition.x, mousePosition.y, 0.0f), glm::vec3(posizioneSchermowc.x, posizioneSchermowc.y, 0.0f), 100.0f)) {
+            
+        // }
     }else
     {
         //std::cout << "Game Over" << std::endl;

@@ -17,6 +17,7 @@
 #include "time.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void processInput(GLFWwindow* window);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -32,6 +33,8 @@ float lastFrame = 0.0f;
 float lastX = SCR_WIDTH/2, lastY = SCR_HEIGHT/2;
 
 Game MyGame(SCR_WIDTH, SCR_HEIGHT);
+
+bool firstMouse = false;
 
 int main()
 {
@@ -58,6 +61,7 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, key_callback); // imposto il call back dei tasti
+    glfwSetCursorPosCallback(window, mouse_callback);
 
     // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -149,4 +153,26 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    MyGame.mousePosition.x = xpos;
+    MyGame.mousePosition.y = ypos;
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // invertito perché le coordinate Y vanno dall'alto verso il basso
+
+    lastX = xpos;
+    lastY = ypos;
 }

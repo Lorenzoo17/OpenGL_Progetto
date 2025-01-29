@@ -56,3 +56,25 @@ Direction Utilities::VectorDirection(glm::vec3 target)
 void Utilities::PlaySound(std::string soundName) {
     //SoundEngine->play2D(ResourceManager::GetSound(soundName).c_str());
 }
+
+glm::vec2 Utilities::worldToScreen(glm::vec3 worldPos, glm::mat4 view, glm::mat4 projection, int screenWidth, int screenHeight)
+{
+    // Trasforma il punto in clip space
+    glm::vec4 clipSpacePos = projection * view * glm::vec4(worldPos, 1.0f);
+
+    // Prospettiva divide per ottenere coordinate normalizzate (NDC)
+    if (clipSpacePos.w != 0.0f)
+    {
+        clipSpacePos.x /= clipSpacePos.w;
+        clipSpacePos.y /= clipSpacePos.w;
+        clipSpacePos.z /= clipSpacePos.w;
+    }
+
+    // Converti da NDC [-1,1] a coordinate schermo [0, width] x [0, height]
+    glm::vec2 screenPos;
+    screenPos.x = (clipSpacePos.x * 0.5f + 0.5f) * screenWidth;
+    screenPos.y = (1.0f - (clipSpacePos.y * 0.5f + 0.5f)) * screenHeight;
+
+    return screenPos;
+}
+
