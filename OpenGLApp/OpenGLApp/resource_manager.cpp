@@ -142,6 +142,8 @@ void ResourceManager::LoadAssets()
     ResourceManager::LoadModel("assets/models/walls/wall.obj", "wall");
     ResourceManager::LoadModel("assets/models/env/Restrooms.obj", "room");
     ResourceManager::LoadModel("assets/models/lamp/lampadina.obj", "lamp");
+    ResourceManager::LoadModel("assets/models/items/poop.obj", "poop");
+    ResourceManager::LoadModel("assets/models/mocio/mocio.obj", "mocio");
     //ResourceManager::LoadModel("assets/models/pavimento/pavimento.obj", "lamp");
     
 
@@ -152,6 +154,8 @@ void ResourceManager::LoadAssets()
     ResourceManager::LoadTexture("assets/textures/wall.png", true, "parete");
     ResourceManager::LoadTexture("assets/textures/wc.png", true, "wc");
     ResourceManager::LoadTexture("assets/textures/slime.png", true, "slime");
+    ResourceManager::LoadTexture("assets/textures/TitleScreen.png", true, "menuTexture");
+    ResourceManager::LoadTexture("assets/textures/button.png", true, "circleButton");
 
     // Caricamento suoni
     ResourceManager::LoadSound("assets/sounds/bell.mp3", "bell");

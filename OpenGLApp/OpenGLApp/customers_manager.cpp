@@ -19,6 +19,11 @@ void CustomersManager::SpawnCustomers() {
     static int index = 0;
     static int customersToSpawn = 0;
     static float customerSpeed = 0.6f;
+    
+    static float initialWaitTime = 12.0f; //tempo tra le ondate
+    static float waitTime = initialWaitTime; //tempo contatore attuale
+    
+    /*
     if(this->customerToServe <= 0)
     {
         this->customerToServe = customersWaves[index];
@@ -26,7 +31,19 @@ void CustomersManager::SpawnCustomers() {
         index = (index < 9) ? index+1 : index; //incrementa l'indice solo fino all'ultima ondata
         customerSpeed = (index > 6) ? customerSpeed : 0.8f; //incrementa la velocita dopo il sesto round
         
+    }*/
+    waitTime -= Time::deltaTime; //fa scorrere il tempo
+    if(waitTime <= 0 || this->customerToServe <= 0)   //verifica che sia scaduto il tempo o che sia stata ripulita l'ondata
+    {
+        this->customerToServe += customersWaves[index]; //aggiunge i nuovi clienti alla lista di customer da servire
+        customersToSpawn += customersWaves[index];      //aggiunge i nuovi clienti alla lista di customer da spownare
+        index = (index < 9) ? index+1 : index;          //incrementa l'indice solo fino all'ultima ondata
+        customerSpeed = (index > 6) ? customerSpeed : 0.8f; //incrementa la velocita dopo il sesto round
+        waitTime = initialWaitTime;                     // resetta il tempo
+        
     }
+    
+    
     
     if (this->timeBtwSpawn <= 0 && customersToSpawn > 0) { // ogni spawnRateTime
         Spawn(customerSpeed); // spawno nuovo customer
@@ -91,6 +108,7 @@ void CustomersManager::DespawnCustomer() {
 
 void CustomersManager::updateBehaviour()
 {
+    
     if(Level != NULL)
     {
         for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
@@ -110,5 +128,34 @@ void CustomersManager::updateBehaviour()
             }
         }
     }else{std::cout << "no Level" << std::endl;}
+    
+    
+    
+    /*
+    if(Level != NULL)
+    {
+        for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
+            if (wc.available && !wc.isDirty) { // se il wc è disponibile e non è sporco
+                for (Customer& c : this->customers_list) { // per ogni cliente
+                    if (!c.customerObject.Destroyed) { // se il cliente non è destroyed
+                        if (c.currentState == CUSTOMER_WAIT) { // se è in wait (non ha ancora un wc associato)
+                            c.targetWc = &wc; // si assegna a quel cliente il suddetto wc
+                            c.SetPath(wc.wcObject.Position); // si setta il path impostando come obiettivo la posizione di targetWc
+                            wc.available = false; // si mette il wc come occupato
+                            this->queueLenght--;
+                            for (Customer& c : this->customers_list) {c.queuePos--;} //fa scorrere la coda
+                        }
+                    }
+                }
+            }
+        }
+        
+        for (Customer& c : this->customers_list) { // per ogni cliente
+            if (!c.customerObject.Destroyed) { // se il cliente non è destroyed
+                c.CustomerBehaviour(Time::deltaTime); // si esegue la FSM per ogni cliente
+            }
+        }
+    }else{std::cout << "no Level" << std::endl;}
+    */
     
 }

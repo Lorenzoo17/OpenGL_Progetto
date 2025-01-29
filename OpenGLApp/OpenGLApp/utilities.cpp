@@ -3,10 +3,14 @@
 //ISoundEngine* SoundEngine = createIrrKlangDevice();
 
 bool Utilities::CheckDistance(glm::vec3 v1, glm::vec3 v2, float distance) {
-	if (sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) < distance)) {
+    
+	if (sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2)) <= distance) {
 		return true;
 	}
+    
 	return false;
+    
+    //return (sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) <= distance));
 }
 
 glm::vec3 Utilities::NormalizeVector(glm::vec3 v) {
@@ -55,4 +59,38 @@ Direction Utilities::VectorDirection(glm::vec3 target)
 
 void Utilities::PlaySound(std::string soundName) {
     //SoundEngine->play2D(ResourceManager::GetSound(soundName).c_str());
+}
+
+glm::vec2 Utilities::worldToScreen(glm::vec3 worldPos, glm::mat4 view, glm::mat4 projection, int screenWidth, int screenHeight)
+{
+    // Trasforma il punto in clip space
+    glm::vec4 clipSpacePos = projection * view * glm::vec4(worldPos, 1.0f);
+
+    // Prospettiva divide per ottenere coordinate normalizzate (NDC)
+    if (clipSpacePos.w != 0.0f)
+    {
+        clipSpacePos.x /= clipSpacePos.w;
+        clipSpacePos.y /= clipSpacePos.w;
+        clipSpacePos.z /= clipSpacePos.w;
+    }
+
+    // Converti da NDC [-1,1] a coordinate schermo [0, width] x [0, height]
+    glm::vec2 screenPos;
+    screenPos.x = (clipSpacePos.x * 0.5f + 0.5f) * screenWidth;
+    screenPos.y = (1.0f - (clipSpacePos.y * 0.5f + 0.5f)) * screenHeight;
+
+    return screenPos;
+}
+
+bool Utilities::clickOverObject(glm::vec3 gameObjectPos, glm::vec2 mousePosition, glm::mat4 view, glm::mat4 projection, int screenWidth, int screenHeight, float distance) {
+    glm::vec2 objectPos = worldToScreen(gameObjectPos, view, projection, screenWidth, screenHeight);
+    glm::vec3 objectScreenPosition = glm::vec3(objectPos.x, objectPos.y, 0.0f);
+    glm::vec3 mouseScreenPosition = glm::vec3(mousePosition.x, mousePosition.y, 0.0f);
+
+    
+    if (CheckDistance(mouseScreenPosition, objectScreenPosition, distance)) {
+        return true;
+    }
+    
+    return false;
 }

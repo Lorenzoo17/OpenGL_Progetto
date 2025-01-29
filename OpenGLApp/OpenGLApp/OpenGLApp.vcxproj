@@ -146,11 +146,13 @@
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="text_renderer.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="utilities.cpp" />
     <ClCompile Include="wc.cpp" />
   </ItemGroup>
@@ -163,11 +165,13 @@
     <ClInclude Include="game_object.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="text_renderer.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="utilities.h" />
     <ClInclude Include="wc.h" />
   </ItemGroup>

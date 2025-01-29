@@ -85,6 +85,12 @@ void GameLevel::init() {
 		newLight.SetShader(ResourceManager::GetShader("3d_mult_light")); // shader base
 		this->lights.push_back(newLight);
 	}
+
+	// Mocio, per ricarica acqua
+	glm::vec3 mocioPosition = glm::vec3(-2.0f, -12.0f, 2.0f);
+	this->Mocio = new GameObject(mocioPosition, glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(1.0f), ResourceManager::GetModel("mocio"));
+
+	this->Mocio->SetShader(ResourceManager::GetShader("3d_mult_light"));
 }
 
 void GameLevel::Draw(RenderData renderData) {
@@ -109,4 +115,12 @@ void GameLevel::Draw(RenderData renderData) {
             l.Draw(renderData);
         }
     }
+
+	for (GameObject& p : this->poopList) {
+		if (!p.Destroyed) {
+			p.Draw(renderData);
+		}
+	}
+
+	this->Mocio->Draw(renderData);
 }

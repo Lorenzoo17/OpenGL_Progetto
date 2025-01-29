@@ -3,6 +3,8 @@
 #include <algorithm>
 #include "time.h"
 #include "game.h"
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 Customer::Customer(GameObject customer_object, glm::vec3 exit_position, Game* game): queuePos(0),patienceTime(75.0f), game(game){
 	this->customerObject = customer_object;
@@ -12,6 +14,10 @@ Customer::Customer(GameObject customer_object, glm::vec3 exit_position, Game* ga
 
 	this->currentPathPoint = 0;
 	this->startPosition = customerObject.Position;
+
+    this->hasSpawnedPoop = false;
+    this->poopRate = 2; // una possibilita' su 3 di spawnare una poop
+    srand(time(NULL));
 }
 
 void Customer::CustomerBehaviour(float deltaTime) {
@@ -77,6 +83,8 @@ void Customer::CustomerDirty() {
     static float wait = 1;
     if(wait <= 0)
     {
+        MakePoop();
+
         this->targetWc->MakeDirty(glm::vec3(0.5f, 0.4f, 0.3f)); // richiama metodo makedirty, per cambiare il colore al wc
         this->currentState = CUSTOMER_EXIT; // esce
         this->SetPath(exitPosition);
@@ -137,4 +145,34 @@ void Customer::SetPath(glm::vec3 wcPosition) {
 	this->pathPoints.push_back(startPosition);
 	this->pathPoints.push_back(wcDoorPosition);
 	this->pathPoints.push_back(wcPosition);
+}
+
+void Customer::MakePoop() { // Richiamato in CustomerDirty()
+    if (hasSpawnedPoop) return;
+
+    int value = rand() % this->poopRate;
+
+    // printf("cacche presenti\n : %d", (int)this->game->Level->poopList.size());
+
+    if (value == 1) {
+        float spawnRadius = 2.0f;
+        float offsetX = static_cast<float>(rand()) / RAND_MAX * spawnRadius;
+
+        glm::vec3 poopSpawnPosition = glm::vec3(
+            this->customerObject.Position.x - offsetX,
+            this->customerObject.Position.y,
+            this->customerObject.Position.z
+        );
+        float scale_multiplier = rand() % (4 - 2) + 1;
+        glm::vec3 spawnScale = scale_multiplier * glm::vec3(0.3f, 0.3f, 0.3f);
+
+        float poopsLimit = 10; // numero massimo di cacche che possono essere presenti nella scena
+
+        if (this->game->Level->poopList.size() < poopsLimit) {
+            GameObject poop(poopSpawnPosition, glm::vec3(90.0f, 1.0f, 1.0f), spawnScale, ResourceManager::GetModel("poop"), 0.0f, glm::vec3(1.0f));
+            poop.SetShader(ResourceManager::GetShader("3d_mult_light"));
+            this->game->Level->poopList.push_back(poop);
+            hasSpawnedPoop = true;
+        }
+    }
 }
