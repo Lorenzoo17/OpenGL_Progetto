@@ -100,7 +100,6 @@ void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
                 this->game->game_score +=10.0f;
                 this->WaterLevel -= 1;
                 this->game->CustomerManager->customerToServe--;
-                std::cout << WaterLevel << std::endl;
                 streak++;   //incrementa la streak
                 streakTime += 3/4 * initialStreakTime; //da un piccolo vantaggio di tempo
             }
@@ -112,11 +111,13 @@ void Player::CleanWc(Wc* wc, float cleanDistance, bool interactPressed) {
 
 void Player::clean(float cleanDistance, bool interactPressed)
 {
+    std::cout << WaterLevel << std::endl;
     for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
         if(wc.isDirty)
-            CleanWc(&wc, 0.2f, interactPressed);
+            if(WaterLevel > 0) // non si possono pulire i bagni senza acquas
+                CleanWc(&wc, 0.2f, interactPressed);
     }
-
+    waterRefill();
 }
 
 void Player::CheckPoop() { // Eseguito in Update
@@ -143,14 +144,11 @@ void Player::CheckPoop() { // Eseguito in Update
                 else {
                     this->game->game_score += 5;
                 }
-
                 // scambio elemento con ultimo e faccio per rimuoverlo
                 if (i != poops.size() - 1) {
                     std::swap(poops[i], poops.back());
                 }
                 poops.pop_back();
-
-
             }
             else {
                 // se sono a distanza per poter interagire coloro per avvisare del pericolo, se mi allontano torna a colore iniziale
@@ -203,6 +201,8 @@ void Player::upadateStreak()
                 speedModetime = initialSpeedModetime;
                 oldspeed = this->Speed;
                 this->Speed = 5;
+                this->WaterLevel = (WaterLevel < MaxWaterLevel) ? WaterLevel + 2: WaterLevel;
+                
             }
             }
         }
@@ -216,7 +216,20 @@ void Player::upadateStreak()
             speedMode = false;
         }
     }
+}
+
+void Player::waterRefill()
+{
+    static float initialWaitTime = 1;
+    static float waitTime = 1;
     
-    
-    
+    waitTime -= Time::deltaTime;
+    if (waitTime <= 0)
+    {
+        if(Utilities::CheckDistance(this->Position, Level->Mocio->Position, 3.0f))
+        {
+            this->WaterLevel = (WaterLevel < MaxWaterLevel) ? WaterLevel + 1: WaterLevel; //incrementa l'acqua solo se è minore del livello massimo
+            waitTime = initialWaitTime;
+        }
+    }
 }

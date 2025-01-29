@@ -37,5 +37,6 @@ public:
     void clean(float cleanDistance, bool interactPressed);
     void CheckPoop();
     void upadateStreak();
+    void waterRefill();
 };
 #endif // PLAYER_H
