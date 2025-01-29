@@ -143,6 +143,7 @@ void ResourceManager::LoadAssets()
     ResourceManager::LoadModel("assets/models/env/Restrooms.obj", "room");
     ResourceManager::LoadModel("assets/models/lamp/lampadina.obj", "lamp");
     ResourceManager::LoadModel("assets/models/items/poop.obj", "poop");
+    ResourceManager::LoadModel("assets/models/mocio/mocio.obj", "mocio");
     //ResourceManager::LoadModel("assets/models/pavimento/pavimento.obj", "lamp");
     
 

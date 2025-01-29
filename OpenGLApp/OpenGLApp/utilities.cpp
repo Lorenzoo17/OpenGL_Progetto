@@ -77,4 +77,3 @@ glm::vec2 Utilities::worldToScreen(glm::vec3 worldPos, glm::mat4 view, glm::mat4
 
     return screenPos;
 }
-
