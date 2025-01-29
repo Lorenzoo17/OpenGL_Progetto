@@ -1,32 +1,4 @@
-﻿  Player.cpp
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244: '=': conversione da 'double' a 'T'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244:         with
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244:         [
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244:             T=float
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(21,36): warning C4244:         ]
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(38,35): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(53,26): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(171,43): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(191,33): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Player.cpp(210,32): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
-  customer.cpp
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customer.cpp(20,15): warning C4244: 'argomento': conversione da 'time_t' a 'unsigned int'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customer.cpp(50,33): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customer.cpp(60,58): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customer.cpp(94,23): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customer.cpp(166,32): warning C4244: 'inizializzazione': conversione da 'int' a 'float'. Possibile perdita di dati.
-  customers_manager.cpp
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customers_manager.cpp(35,23): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customers_manager.cpp(55,31): warning C4244: '-=': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\customers_manager.cpp(126,47): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
-  game.cpp
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\Camera.h(82,20): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
-  (compilazione del file di origine 'game.cpp')
-  
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\game.cpp(173,50): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\game.cpp(178,51): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\game.cpp(181,51): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\OpenGLApp\game.cpp(184,50): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
-  utilities.cpp
-  Generazione del codice in corso...
+﻿  utilities.cpp
+  LINK : C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\x64\Debug\OpenGLApp.exe non trovato o non compilato dall'ultimo collegamento incrementale; verrà eseguito il collegamento completo
+LINK : warning LNK4098: la libreria predefinita 'MSVCRT' è in conflitto con l'utilizzo di altre librerie; usare /NODEFAULTLIB:libreria
   OpenGLApp.vcxproj -> C:\Universita\Anno 2024-2025\Informatica grafica\Progetto\OpenGL_Progetto\OpenGLApp\x64\Debug\OpenGLApp.exe

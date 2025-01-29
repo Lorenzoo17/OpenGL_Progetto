@@ -64,6 +64,10 @@ void GameObject::Draw(RenderData renderData)
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(this->Position));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
 
+
+        model = glm::rotate(model, glm::radians(this->Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // then rotate
+        model = glm::rotate(model, glm::radians(this->Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // then rotate
+        model = glm::rotate(model, glm::radians(this->Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
         // Le traslazioni sono per avere come origine il punto il alto a sinistra
         // model = glm::translate(model, glm::vec3(0.5f * this->Size.x, 0.5f * this->Size.y, 0.0f)); // move origin of rotation to center of quad
         /*

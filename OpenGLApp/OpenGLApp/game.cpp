@@ -7,7 +7,7 @@
 #include "time.h"
 #include "Player.h"
 
-//#include "text_renderer.h"
+#include "text_renderer.h"
 
 
 
@@ -25,13 +25,15 @@ Camera* camera;
 glm::vec3 INITIAL_CAMERA_POSITION(0.0f, 0.0f, 8.0f);
 
 Player* player;
+GameObject* menuTexture; // gameObject contenente la texture del menu
+GameObject* startButton;
 
 //GameObject* Player;
 const glm::vec3 INITIAL_PLAYER_POSITION(0.0f, 0.0f, 3.0f);
 const float PLAYER_INITIAL_VELOCITY(3.5f);
 float angle = 0.0f;
 
-//TextRenderer* Text;
+TextRenderer* Text;
 
 bool interactPressed; // booleano che va a true se si preme E (test)
 
@@ -45,7 +47,7 @@ glm::mat4 projection;
 // rendering di scatole e interazione in process input : quasi, migliorare 
 
 Game::Game(unsigned int width, unsigned int height) : Width(width), Height(height), isGameOver(false) {
-
+    isInMenu = true; // si parte con il menu attivo
 };
 
 void Game::Init(){
@@ -82,7 +84,19 @@ void Game::Init(){
     player = new Player(INITIAL_PLAYER_POSITION, glm::vec3(70.0f, 0.0f, 0.0f), glm::vec3(1.0f), ResourceManager::GetModel("robot1"), PLAYER_INITIAL_VELOCITY, glm::vec3(1.0f), glm::vec3(0.0f), 10, this);
 	player->SetShader(ResourceManager::GetShader("3d_mult_light")); // Si assegna anche uno shader al player
 
-	
+    glm::vec3 menuTexturePosition = glm::vec3(0.0f, 1.0f, 7.0f);
+    glm::vec3 menuTextureSize = glm::vec3(3.8f, -3.5f, 0.0f);
+    menuTexture = new GameObject(menuTexturePosition, menuTextureSize, ResourceManager::GetTexture("menuTexture"));
+    menuTexture->SetShader(ResourceManager::GetShader("base"));
+    menuTexture->Rotation = glm::vec3(50.0f, 0.0f, 0.0f);
+    menuTexture->Color = glm::vec3(0.7f, 0.7f, 0.7f);
+
+    glm::vec3 startButtonPosition = glm::vec3(0.0f, 0.0f, 7.0f);
+    glm::vec3 startButtonSize = glm::vec3(1.0f, 1.0f, 1.0f);
+    startButton = new GameObject(startButtonPosition, startButtonSize, ResourceManager::GetTexture("circleButton"));
+    startButton->SetShader(ResourceManager::GetShader("base"));
+    startButton->Rotation = glm::vec3(50.0f, 0.0f, 0.0f);
+    startButton->Color = glm::vec3(0.2f, 0.2f, 0.2f);
 
 	// Settaggio camera
 	// Per ora si assegna la matrice di vista staticamente
@@ -107,35 +121,46 @@ void Game::Init(){
 	}
 
 	// Inizializzazione testo
-	//Text = new TextRenderer(this->Width, this->Height);
-	//Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
+	Text = new TextRenderer(this->Width, this->Height);
+	Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
 }
 
 void Game::Render() {
 
-	UpdateRenderData(); // aggiorno i dati di rendering da passare ai gameobject per il rendering
+    if (!isInMenu) { // Se non si è nel menu, renderizza il gioco
+        UpdateRenderData(); // aggiorno i dati di rendering da passare ai gameobject per il rendering
 
-	// Necessario passare la matrice di vista per assegnarla prima della model
-	Level->Draw(renderData); // renderizzo componenti statici del livello, li renderizzo per primi in quanto li voglio sotto tutto il resto
+        // Necessario passare la matrice di vista per assegnarla prima della model
+        Level->Draw(renderData); // renderizzo componenti statici del livello, li renderizzo per primi in quanto li voglio sotto tutto il resto
 
-    
-	for (Customer& c : this->CustomerManager->customers_list) {
-		if (!c.customerObject.Destroyed)
-			c.customerObject.Draw(renderData);
-	}
-     
 
-	// Va renderizzato dopo per il blending (vedi glEnable(GL_BLEND) nel main), inoltre la posizione in z è 3.0f per averlo sopra tutto ma comunque sotto la camera (5.0f)
-	player->Draw(renderData); // Rendering del player, si attiva in automatico lo shader giusto e viene assegnata la texture corretta
-	
-	//std::stringstream ss; ss << this->CustomerManager->customers_list.size();
-	//Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
-	std::stringstream ss; ss << game_score;
-	//Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
+        for (Customer& c : this->CustomerManager->customers_list) {
+            if (!c.customerObject.Destroyed)
+                c.customerObject.Draw(renderData);
+        }
+
+
+        // Va renderizzato dopo per il blending (vedi glEnable(GL_BLEND) nel main), inoltre la posizione in z è 3.0f per averlo sopra tutto ma comunque sotto la camera (5.0f)
+        player->Draw(renderData); // Rendering del player, si attiva in automatico lo shader giusto e viene assegnata la texture corretta
+
+        //std::stringstream ss; ss << this->CustomerManager->customers_list.size();
+        //Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
+        std::stringstream ss; ss << game_score;
+        //Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
+    }
+    else { // Se si e' nel menu
+        UpdateRenderData(); // aggiorno i dati di rendering da passare ai gameobject per il rendering
+        menuTexture->Draw(renderData);
+        startButton->Draw(renderData);
+
+        Text->RenderText("WC CLEANER", Width / 3, Height / 20, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
+
+        Text->RenderText("PREMI INVIO PER GIOCARE", Width / 3, 400.0f, 1.0f);
+    }
 }
 
 void Game::Update() {
-    if (!isGameOver){
+    if (!isGameOver && !isInMenu){
         ProcessInput();
         camera->CameraFollow(player->Position); // Per camera che segue il player
         //player->Idle(INITIAL_PLAYER_POSITION.z);
@@ -160,8 +185,22 @@ void Game::Update() {
         // }
     }else
     {
-        //std::cout << "Game Over" << std::endl;
-        //high score
+        if (isInMenu) {
+            if (this->Keys[GLFW_KEY_ENTER]) {
+                isInMenu = false; // Esce dal menu
+            }
+
+            if (Utilities::clickOverObject(startButton->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 200.0f)) {
+                startButton->Color = glm::vec3(0.2f, 0.8f, 0.2f);
+            }
+            else {
+                startButton->Color = glm::vec3(0.2f, 0.2f, 0.2f);
+            }
+        }
+        else if (isGameOver) {
+            //std::cout << "Game Over" << std::endl;
+            //high score
+        }
     }
 }
 
@@ -184,7 +223,7 @@ void Game::ProcessInput() {
         player->Move(glm::vec3(1.0f, 0.0f, 0.0f),deltaTime);
     }
     interactPressed = this->Keys[GLFW_KEY_E];
-    
+
     if (mouseLeftClick) {
         if (Utilities::clickOverObject(this->Level->Mocio->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 50.0f)) {
             player->waterRefill();

@@ -154,6 +154,8 @@ void ResourceManager::LoadAssets()
     ResourceManager::LoadTexture("assets/textures/wall.png", true, "parete");
     ResourceManager::LoadTexture("assets/textures/wc.png", true, "wc");
     ResourceManager::LoadTexture("assets/textures/slime.png", true, "slime");
+    ResourceManager::LoadTexture("assets/textures/TitleScreen.png", true, "menuTexture");
+    ResourceManager::LoadTexture("assets/textures/button.png", true, "circleButton");
 
     // Caricamento suoni
     ResourceManager::LoadSound("assets/sounds/bell.mp3", "bell");

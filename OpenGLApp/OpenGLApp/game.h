@@ -18,6 +18,7 @@ public:
 	CustomersManager* CustomerManager;
 	RenderData renderData;
     bool isGameOver;
+	bool isInMenu;
     
 	Game(unsigned int Width, unsigned int Height);
 
