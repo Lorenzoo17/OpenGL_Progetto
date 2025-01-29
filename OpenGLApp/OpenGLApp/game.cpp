@@ -187,7 +187,7 @@ void Game::ProcessInput() {
     
     if (mouseLeftClick) {
         if (Utilities::clickOverObject(this->Level->Mocio->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 100.0f)) {
-            this->Level->Mocio->Color = glm::vec3(0.0f);
+            player->waterRefill();
         }
     }
 }

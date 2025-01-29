@@ -117,7 +117,7 @@ void Player::clean(float cleanDistance, bool interactPressed)
             if(WaterLevel > 0) // non si possono pulire i bagni senza acquas
                 CleanWc(&wc, 0.2f, interactPressed);
     }
-    waterRefill();
+    //waterRefill();
 }
 
 void Player::CheckPoop() { // Eseguito in Update
@@ -226,7 +226,7 @@ void Player::waterRefill()
     waitTime -= Time::deltaTime;
     if (waitTime <= 0)
     {
-        if(Utilities::CheckDistance(this->Position, Level->Mocio->Position, 3.0f))
+        if(Utilities::CheckDistance(this->Position, Level->Mocio->Position, 6.0f))
         {
             this->WaterLevel = (WaterLevel < MaxWaterLevel) ? WaterLevel + 1: WaterLevel; //incrementa l'acqua solo se è minore del livello massimo
             waitTime = initialWaitTime;
