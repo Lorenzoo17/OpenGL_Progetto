@@ -70,10 +70,10 @@ void GameLevel::init() {
 	// PER CAMBIARE NUMERO DI LUCI MODIFICARE PARAMETRO PRESENTE NELLO SHADER!
 	// MODIFICARLO POI PER SETTARLO CON UNO UNIFORM!!
 	std::vector<glm::vec3> lightsPositions = {
-		glm::vec3(-2.0f, -1.0f, 4.0f),
-		glm::vec3(-2.0f, -5.0f, 4.0f),
-		glm::vec3(-2.0f, -9.0f, 4.0f),
-		glm::vec3(0.0f, -12.0f, 4.0f)
+		glm::vec3(-2.5f, -1.0f, 3.5f),
+		glm::vec3(-2.5f, -5.0f, 3.5f),
+		glm::vec3(-2.5f, -9.0f, 3.5f),
+		glm::vec3(0.0f, -13.2f, 3.5f)
 	};
 	std::vector<glm::vec3> lightsColors = { // Colore per ora usato solo per dare un colore differente all'oggetto che rappresenta la luce, non cambia il colore della luce in se
 		glm::vec3(1.0f),
@@ -85,7 +85,11 @@ void GameLevel::init() {
 	int n_lights = static_cast<int>(lightsPositions.size()); // numero di luci nella scena
 
 	for (int i = 0; i < n_lights; i++) {
-		GameObject newLight(lightsPositions[i], glm::vec3(0.0f), glm::vec3(0.3f), ResourceManager::GetModel("lamp"), 0.0f, lightsColors[i]);
+		float z_rotation = -90.0f;
+		if (i == n_lights - 1) {
+			z_rotation = 0.0f;
+		}
+		GameObject newLight(lightsPositions[i], glm::vec3(-0.3f, 0.0f, z_rotation), glm::vec3(0.2f), ResourceManager::GetModel("lamp"), 0.0f, lightsColors[i]);
 		newLight.SetShader(ResourceManager::GetShader("3d_mult_light")); // shader base
 		this->lights.push_back(newLight);
 	}

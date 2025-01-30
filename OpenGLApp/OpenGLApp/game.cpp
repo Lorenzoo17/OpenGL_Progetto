@@ -158,9 +158,9 @@ void Game::Render() {
         menuTexture->Draw(renderData);
         startButton->Draw(renderData);
 
-        Text->RenderText("WC CLEANER", Width / 3, Height / 20, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
+        Text->RenderText("WC CLEANER", 250.0f, 150.0f, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
 
-        Text->RenderText("PREMI INVIO O IL BOTTONE PER GIOCARE", Width / 4, 350.0f, 1.0f);
+        Text->RenderText("PREMI INVIO O IL BOTTONE PER GIOCARE", 150.0f, 350.0f, 1.0f);
     }
     else if (isGameOver) {
         int record = ResourceManager::saveHighScore(this->game_score);
@@ -219,7 +219,7 @@ void Game::Update() {
             }
         }
         else if (isGameOver) {
-            std::cout << "Game Over" << std::endl;
+            // std::cout << "Game Over" << std::endl;
             //high score
         }
     }
