@@ -114,7 +114,7 @@ void Customer::CustomerMovePath(bool exit) {
 			}
 			else {
 				this->customerObject.Destroyed = true; // per non renderizzarlo piu
-				this->targetWc->available = true; // libero il wc
+				//this->targetWc->available = true; // libero il wc
 				this->targetWc = nullptr; // tolgo il wc dal riferimento, in modo poi eventualmente da poter riutilizzare il gameobject
 
 				this->pathPoints.clear(); // resetto il path
@@ -175,4 +175,9 @@ void Customer::MakePoop() { // Richiamato in CustomerDirty()
             hasSpawnedPoop = true;
         }
     }
+}
+
+void Customer::assignWc(Wc* wc)
+{
+    this->targetWc = wc;
 }

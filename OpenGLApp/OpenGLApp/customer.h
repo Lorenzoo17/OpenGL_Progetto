@@ -40,6 +40,7 @@ public:
     
 	void CustomerBehaviour(float deltaTime); // Da eseguire in update, gestisce la logica dell'AI
 	void SetPath(glm::vec3 wcPosition); // Il path calcolato in base alla posizione del wc
+    void assignWc(Wc*);
 private:
 	void CustomerMovePath(bool exit); // per muoversi seguendo un path verso wc / uscita
 	void CustomerWait(); // Mentre aspetta wc

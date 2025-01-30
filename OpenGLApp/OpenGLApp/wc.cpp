@@ -19,4 +19,5 @@ void Wc::Clean() {
 	this->wcObject.Color = glm::vec3(1.0f);
 
 	isDirty = false;
+    available = true;
 }
