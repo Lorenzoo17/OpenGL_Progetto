@@ -7,7 +7,7 @@
 #include "time.h"
 #include "Player.h"
 
-#include "text_renderer.h"
+//#include "text_renderer.h"
 
 
 
@@ -33,7 +33,7 @@ const glm::vec3 INITIAL_PLAYER_POSITION(0.0f, 0.0f, 3.0f);
 const float PLAYER_INITIAL_VELOCITY(3.5f);
 float angle = 0.0f;
 
-TextRenderer* Text;
+//TextRenderer* Text;
 
 bool interactPressed; // booleano che va a true se si preme E (test)
 
@@ -74,7 +74,7 @@ void Game::Init(){
 
 	ResourceManager::GetShader("3d_mult_light").Use();
 	ResourceManager::GetShader("3d_mult_light").SetMatrix4("projection", projection);
-
+    
 	// Si creano i gameobject e si assegna lo shader corretto 
 	// Creazione del player con texture robot, velocita 2.5 e direzione vec3(0)
 	// Model test_model("resources/robot/robot_1.obj");
@@ -121,8 +121,8 @@ void Game::Init(){
 	}
 
 	// Inizializzazione testo
-	Text = new TextRenderer(this->Width, this->Height);
-	Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
+	//Text = new TextRenderer(this->Width, this->Height);
+	//Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
 }
 
 void Game::Render() {
@@ -146,21 +146,21 @@ void Game::Render() {
         //std::stringstream ss; ss << this->CustomerManager->customers_list.size();
         //Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
         std::stringstream ss; ss << game_score;
-        Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
+        //Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
 
         // Text rendere del water level
         std::stringstream swater; 
         swater << player->getWaterLevel();
-        Text->RenderText("Water:" + swater.str(), 600.0f, 2.0f, 1.7f);
+        //Text->RenderText("Water:" + swater.str(), 600.0f, 2.0f, 1.7f);
     }
     else { // Se si e' nel menu
         UpdateRenderData(); // aggiorno i dati di rendering da passare ai gameobject per il rendering
         menuTexture->Draw(renderData);
         startButton->Draw(renderData);
 
-        Text->RenderText("WC CLEANER", Width / 3, Height / 20, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
+        //Text->RenderText("WC CLEANER", Width / 3, Height / 20, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
 
-        Text->RenderText("PREMI INVIO O IL BOTTONE PER GIOCARE", Width / 4, 350.0f, 1.0f);
+        //Text->RenderText("PREMI INVIO O IL BOTTONE PER GIOCARE", Width / 4, 350.0f, 1.0f);
     }
 }
 
@@ -184,7 +184,7 @@ void Game::Update() {
         DoCollisions(); //togli
 
         
-        printf("%f\n" ,sqrt(pow((Level->Mocio->Position.x - player->Position.x), 2) + pow((Level->Mocio->Position.y - player->Position.y), 2)));
+        //printf("%f\n" ,sqrt(pow((Level->Mocio->Position.x - player->Position.x), 2) + pow((Level->Mocio->Position.y - player->Position.y), 2)));
         // glm::vec2 posizioneSchermowc = Utilities::worldToScreen(this->Level->toilets[0].wcObject.Position, camera->GetViewMatrix(), projection, Width, Height);
         // if (Utilities::CheckDistance(glm::vec3(mousePosition.x, mousePosition.y, 0.0f), glm::vec3(posizioneSchermowc.x, posizioneSchermowc.y, 0.0f), 100.0f)) {
         // }
@@ -278,4 +278,29 @@ void Game::DoCollisions() {
 void Game::UpdateRenderData() {
 	renderData.cameraPosition = camera->Position;
 	renderData.viewMatrix = camera->GetViewMatrix(); // non da problemi metterla qui e non nei singoli come prima?
+}
+
+void Game::updateProjection(float width, float height)
+{
+    projection = glm::mat4(1.0f);
+    float cameraDistance = 5.0f;
+    float aspect = (float)this->Width / this->Height;
+    //projection = glm::ortho(-aspect * cameraDistance, aspect * cameraDistance, -1.0f * cameraDistance, 1.0f * cameraDistance, 0.1f, 100.0f);
+    projection = glm::perspective(11.0f,  (float)this->Width / (float)this->Height, 0.1f, 100.0f);
+
+    // Si assegna la matrice di proiezione agli shader
+    ResourceManager::GetShader("base").Use();
+    ResourceManager::GetShader("base").SetMatrix4("projection", projection);
+    ResourceManager::GetShader("base").SetInteger("texture1", 0); //poi da modificare
+    ResourceManager::GetShader("base").SetInteger("texture2", 1); //poi da modificare
+
+    ResourceManager::GetShader("base3d").Use();
+    ResourceManager::GetShader("base3d").SetMatrix4("projection", projection);
+
+    ResourceManager::GetShader("base3d_light").Use();
+    ResourceManager::GetShader("base3d_light").SetMatrix4("projection", projection);
+
+    ResourceManager::GetShader("3d_mult_light").Use();
+    ResourceManager::GetShader("3d_mult_light").SetMatrix4("projection", projection);
+    
 }

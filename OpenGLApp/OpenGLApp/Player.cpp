@@ -45,7 +45,6 @@ void Player::Move(glm::vec3 direction, float deltaTime)
         this->Position = desiredPosition;
         this->Rotation.y = angle;
         //this->SetRotation( glm::vec3(this->Rotation.x, this->Rotation.y, this->Rotation.z)); // PER MODELLI 3D SI FA ATTORNO AD ASSE Y! QUINDI ORA IN GAMEOBJECT QUESTE ROTAZIONI LE APPLICO AD ASSE Y
-
         Player::collision();
     }
     else
@@ -65,25 +64,28 @@ void Player::collision() {
 
     for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
         Collision result = Utilities::CheckCollision((*this), wc.wcObject);
-        
         if (std::get<0>(result)) {
             Direction dir = std::get<1>(result);
             glm::vec3 diff_vector = std::get<2>(result);
+            
 
             // Calcola la penetrazione
             float penetrationX = wc.wcObject.Size.x / 2.0f + this->Size.x / 2.0f - std::abs(diff_vector.x);
             float penetrationY = wc.wcObject.Size.y / 2.0f + this->Size.y / 2.0f - std::abs(diff_vector.y);
 
             if (dir == DIR_LEFT && this->MoveDirection.x > 0)
-                this->Position.x -= penetrationX; // Sposta il giocatore a sinistra
+            {this->Position.x -= penetrationX; // Sposta il giocatore a sinistra
+                printf("spostato");}
             else if (dir == DIR_RIGHT && this->MoveDirection.x < 0)
-                this->Position.x += penetrationX; // Sposta il giocatore a destra
-
+            {this->Position.x += penetrationX; // Sposta il giocatore a destra
+                printf("spostato");}
             if (dir == DIR_UP && this->MoveDirection.y < 0) {
-                this->Position.y += penetrationY; // Sposta il giocatore in alto
+                {this->Position.y += penetrationY; // Sposta il giocatore in alto
+                    printf("spostato");}
             }
             else if (dir == DIR_DOWN && this->MoveDirection.y > 0) {
-                this->Position.y -= penetrationY; // Sposta il giocatore in basso
+                {this->Position.y -= penetrationY; // Sposta il giocatore in basso
+                    printf("spostato");}
             }
         
         }
@@ -114,7 +116,7 @@ void Player::CleanWc(Wc* wc, bool interactPressed) {
 
 void Player::clean( bool interactPressed)
 {
-    std::cout << WaterLevel << std::endl;
+    //std::cout << WaterLevel << std::endl;
     for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
         if(wc.isDirty)
             if(WaterLevel > 0) // non si possono pulire i bagni senza acquas

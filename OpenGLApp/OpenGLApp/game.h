@@ -26,6 +26,8 @@ public:
 	void Update(); // Metodo dove vengono eseguiti i comportamenti che devono essere aggiornati ad ogni frame
 	void Render(); // Metodo dove si eseguono esclusivamente i rendering
 	void ProcessInput(); // Metodo dove si gestiscono gli input
+    
+    void updateProjection(float width, float height);
 
 private:
 	void UpdateRenderData();

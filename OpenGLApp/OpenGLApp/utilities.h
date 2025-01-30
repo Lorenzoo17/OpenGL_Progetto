@@ -28,6 +28,7 @@ public:
 	static Direction VectorDirection(glm::vec3 target);
 	static glm::vec2 worldToScreen(glm::vec3 worldPos, glm::mat4 view, glm::mat4 projection, int screenWidth, int screenHeight);
 	static bool clickOverObject(glm::vec3 gameObjectPos, glm::vec2 mousePosition, glm::mat4 view, glm::mat4 projection, int screenWidth, int screenHeight, float distance);
+std::string directionToString(Direction dir);
 };
 
 #endif // !UTILITIES_H
