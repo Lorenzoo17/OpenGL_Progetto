@@ -206,6 +206,7 @@ void Game::Update() {
             if (this->Keys[GLFW_KEY_ENTER]) {
                 isInMenu = false; // Esce dal menu
             }
+            
             glm::vec3 button_offset = glm::vec3(startButton->Position.x, startButton->Position.y + 2.0f, 0.0f);
             if (Utilities::clickOverObject(button_offset, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 100.0f)) {
                 startButton->Color = glm::vec3(0.2f, 0.8f, 0.2f);
@@ -218,7 +219,7 @@ void Game::Update() {
             }
         }
         else if (isGameOver) {
-            //std::cout << "Game Over" << std::endl;
+            std::cout << "Game Over" << std::endl;
             //high score
         }
     }
@@ -248,7 +249,8 @@ void Game::ProcessInput() {
     }
     interactPressed = this->Keys[GLFW_KEY_E];
 
-    if (Utilities::clickOverObject(this->Level->Mocio->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 50.0f)) {
+     
+    if (Utilities::clickOverObject(this->Level->Mocio->Position, mousePosition, camera->GetViewMatrix(), projection, this->Width, this->Height, 50.0f)) {
         if (mouseLeftClick) {
             player->waterRefill();
         }

@@ -131,31 +131,6 @@ void CustomersManager::updateBehaviour()
     
     
     
-    /*
-    if(Level != NULL)
-    {
-        for (Wc& wc : this->Level->toilets) { // per ogni wc nella scena
-            if (wc.available && !wc.isDirty) { // se il wc è disponibile e non è sporco
-                for (Customer& c : this->customers_list) { // per ogni cliente
-                    if (!c.customerObject.Destroyed) { // se il cliente non è destroyed
-                        if (c.currentState == CUSTOMER_WAIT) { // se è in wait (non ha ancora un wc associato)
-                            c.targetWc = &wc; // si assegna a quel cliente il suddetto wc
-                            c.SetPath(wc.wcObject.Position); // si setta il path impostando come obiettivo la posizione di targetWc
-                            wc.available = false; // si mette il wc come occupato
-                            this->queueLenght--;
-                            for (Customer& c : this->customers_list) {c.queuePos--;} //fa scorrere la coda
-                        }
-                    }
-                }
-            }
-        }
-        
-        for (Customer& c : this->customers_list) { // per ogni cliente
-            if (!c.customerObject.Destroyed) { // se il cliente non è destroyed
-                c.CustomerBehaviour(Time::deltaTime); // si esegue la FSM per ogni cliente
-            }
-        }
-    }else{std::cout << "no Level" << std::endl;}
-    */
+   
     
 }

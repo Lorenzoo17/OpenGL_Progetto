@@ -159,8 +159,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
-    MyGame.Height = height;
-    MyGame.Width = width;
+    MyGame.Height = height/2;
+    MyGame.Width = width/2;
     MyGame.updateProjection(0.0f, 0.0f);
 }
 
