@@ -229,18 +229,22 @@ void Game::ProcessInput() {
     player->MoveDirection = glm::vec3(0.0f); // resetto per evitare che continui a muoversi senza il mio input
 
     if (this->Keys[GLFW_KEY_W]) {
-        player->Move(glm::vec3(0.0f, 1.0f, 0.0f),deltaTime);
+        if(player->Position.y <= this->Level->map_limit_up)
+            player->Move(glm::vec3(0.0f, 1.0f, 0.0f),deltaTime);
         //+= glm::vec3(0.0f, 1.0f, 0.0f);
     }
     if (this->Keys[GLFW_KEY_S]) {
         // if(Player->Position.y > -2.0f) // es. definizione limiti mappa
-        player->Move(glm::vec3(0.0f, -1.0f, 0.0f),deltaTime);
+        if (player->Position.y >= this->Level->map_limit_down)
+            player->Move(glm::vec3(0.0f, -1.0f, 0.0f),deltaTime);
     }
     if (this->Keys[GLFW_KEY_A]) {
-        player->Move(glm::vec3(-1.0f, 0.0f, 0.0f),deltaTime);
+        if (player->Position.x >= this->Level->map_limit_sx)
+            player->Move(glm::vec3(-1.0f, 0.0f, 0.0f),deltaTime);
     }
     if (this->Keys[GLFW_KEY_D]) {
-        player->Move(glm::vec3(1.0f, 0.0f, 0.0f),deltaTime);
+        if (player->Position.x <= this->Level->map_limit_dx)
+            player->Move(glm::vec3(1.0f, 0.0f, 0.0f),deltaTime);
     }
     interactPressed = this->Keys[GLFW_KEY_E];
 

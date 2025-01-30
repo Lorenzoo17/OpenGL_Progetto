@@ -16,6 +16,10 @@ public:
 	GameObject* Wall_3d;
     GameObject* Mocio;
 	std::vector<GameObject> poopList = std::vector<GameObject>(); // lista delle poops spawnate dai customers
+	float map_limit_sx;
+	float map_limit_dx;
+	float map_limit_up;
+	float map_limit_down;
 
 	GameLevel(); // costruttore
     

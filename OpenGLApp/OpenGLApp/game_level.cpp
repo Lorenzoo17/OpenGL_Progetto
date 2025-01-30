@@ -15,6 +15,12 @@ void GameLevel::init() {
 	//float unit_width = 1.0f; // in modo da unificare posizione e size, se modifico size modifico anche la posizione di conseguenza
 	//float unit_height = 1.0f;
 
+	// Definizione dei limiti della mappa
+	map_limit_sx = -1.8f;
+	map_limit_dx = 2.5f;
+	map_limit_up = 2.0f;
+	map_limit_down = -12.5f;
+
 	glm::vec3 offset = glm::vec3(-3.0f, -12.0f, 0.0f);
 
 	// Stanza
@@ -85,8 +91,8 @@ void GameLevel::init() {
 	}
 
 	// Mocio, per ricarica acqua
-	glm::vec3 mocioPosition = glm::vec3(-2.0f, -12.0f, 2.0f);
-	this->Mocio = new GameObject(mocioPosition, glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(1.0f), ResourceManager::GetModel("mocio"));
+	glm::vec3 mocioPosition = glm::vec3(-1.5f, -12.0f, 2.0f);
+	this->Mocio = new GameObject(mocioPosition, glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(0.4f), ResourceManager::GetModel("mocio"));
 
 	this->Mocio->SetShader(ResourceManager::GetShader("3d_mult_light"));
 }
