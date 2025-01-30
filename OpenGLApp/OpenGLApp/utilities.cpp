@@ -79,6 +79,11 @@ Direction Utilities::VectorDirection(glm::vec3 target)
     return (Direction)best_match;
 }
 
+glm::vec3 Utilities::VectorInterpolation(glm::vec3 v1, glm::vec3 v2, float t) {
+    return (1 - t) * v1 + t * v2;
+};
+
+
 void Utilities::PlaySound(std::string soundName) {
     //SoundEngine->play2D(ResourceManager::GetSound(soundName).c_str());
 }

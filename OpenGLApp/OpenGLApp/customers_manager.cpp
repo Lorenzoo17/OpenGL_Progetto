@@ -144,7 +144,6 @@ void CustomersManager::updateBehaviour()
                                 wc.available = false; // si mette il wc come occupato
                                 this->queueLenght--;
                                 for (Customer& c : this->customers_list) {c.queuePos--;} //fa scorrere la coda
-                                printf("move\n");
                             }
                         }
                     }

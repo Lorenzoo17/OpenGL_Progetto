@@ -7,7 +7,7 @@
 #include "time.h"
 #include "Player.h"
 
-#include "text_renderer.h"
+//#include "text_renderer.h"
 
 
 
@@ -33,7 +33,7 @@ const glm::vec3 INITIAL_PLAYER_POSITION(0.0f, 0.0f, 3.0f);
 const float PLAYER_INITIAL_VELOCITY(3.5f);
 float angle = 0.0f;
 
-TextRenderer* Text;
+//TextRenderer* Text;
 
 bool interactPressed; // booleano che va a true se si preme E (test)
 
@@ -121,8 +121,8 @@ void Game::Init(){
 	}
 
 	// Inizializzazione testo
-	Text = new TextRenderer(this->Width, this->Height);
-	Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
+	//Text = new TextRenderer(this->Width, this->Height);
+	//Text->Load("assets/fonts/Roboto/Roboto-Regular.ttf", 24);
 }
 
 void Game::Render() {
@@ -146,33 +146,33 @@ void Game::Render() {
         //std::stringstream ss; ss << this->CustomerManager->customers_list.size();
         //Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
         std::stringstream ss; ss << game_score;
-        Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
+        //Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
 
         // Text rendere del water level
         std::stringstream swater;
         swater << player->getWaterLevel();
-        Text->RenderText("Water:" + swater.str(), 600.0f, 2.0f, 1.7f);
+       // Text->RenderText("Water:" + swater.str(), 600.0f, 2.0f, 1.7f);
     }
     else if (!isGameOver) { // Se si e' nel menu
         UpdateRenderData(); // aggiorno i dati di rendering da passare ai gameobject per il rendering
         menuTexture->Draw(renderData);
         startButton->Draw(renderData);
 
-        Text->RenderText("WC CLEANER", 250.0f, 150.0f, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
+        //Text->RenderText("WC CLEANER", 250.0f, 150.0f, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
 
-        Text->RenderText("PREMI INVIO O IL BOTTONE PER GIOCARE", 150.0f, 350.0f, 1.0f);
+        //Text->RenderText("PREMI INVIO O IL BOTTONE PER GIOCARE", 150.0f, 350.0f, 1.0f);
     }
     else if (isGameOver) {
         int record = ResourceManager::saveHighScore(this->game_score);
-        Text->RenderText("GAME OVER", 250.0f, 200.0f, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
+        //Text->RenderText("GAME OVER", 250.0f, 200.0f, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
 
         std::stringstream score; 
         score << game_score;
-        Text->RenderText("NEW SCORE: " + score.str(), 280.0f, 300.0f, 1.0f);
+       // Text->RenderText("NEW SCORE: " + score.str(), 280.0f, 300.0f, 1.0f);
 
         std::stringstream ssrecord;
         ssrecord << record;
-        Text->RenderText("RECORD: " + ssrecord.str(), 280.0f, 350.0f, 1.0f);
+        //Text->RenderText("RECORD: " + ssrecord.str(), 280.0f, 350.0f, 1.0f);
     }
 }
 
@@ -228,25 +228,27 @@ void Game::Update() {
 void Game::ProcessInput() {
     double deltaTime = Time::deltaTime;
     player->MoveDirection = glm::vec3(0.0f); // resetto per evitare che continui a muoversi senza il mio input
-
+    glm::vec2 dir = glm::vec2(0.0f);
+    
     if (this->Keys[GLFW_KEY_W]) {
         if(player->Position.y <= this->Level->map_limit_up)
-            player->Move(glm::vec3(0.0f, 1.0f, 0.0f),deltaTime);
-        //+= glm::vec3(0.0f, 1.0f, 0.0f);
+            dir.y = 1.0f;//player->Move(glm::vec3(0.0f, 1.0f, 0.0f),deltaTime);
+        
     }
     if (this->Keys[GLFW_KEY_S]) {
         // if(Player->Position.y > -2.0f) // es. definizione limiti mappa
         if (player->Position.y >= this->Level->map_limit_down)
-            player->Move(glm::vec3(0.0f, -1.0f, 0.0f),deltaTime);
+            dir.y = -1.0f; //player->Move(glm::vec3(0.0f, -1.0f, 0.0f),deltaTime);
     }
     if (this->Keys[GLFW_KEY_A]) {
         if (player->Position.x >= this->Level->map_limit_sx)
-            player->Move(glm::vec3(-1.0f, 0.0f, 0.0f),deltaTime);
+            dir.x = -1.0f;//player->Move(glm::vec3(-1.0f, 0.0f, 0.0f),deltaTime);
     }
     if (this->Keys[GLFW_KEY_D]) {
         if (player->Position.x <= this->Level->map_limit_dx)
-            player->Move(glm::vec3(1.0f, 0.0f, 0.0f),deltaTime);
+            dir.x = 1.0f;//player->Move(glm::vec3(1.0f, 0.0f, 0.0f),deltaTime);
     }
+    player->Move(glm::vec3(dir.x, dir.y, 0.0f),deltaTime);
     interactPressed = this->Keys[GLFW_KEY_E];
 
      

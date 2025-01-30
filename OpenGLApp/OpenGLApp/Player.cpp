@@ -21,6 +21,7 @@ void Player::Idle(float initialPos)
     float amplitude = 1/2;
     this->Position.z =  initialPos + (amplitude * sin(Time::currentTime  * speed/5 )) ;
     std::cout << this->Position.z << std::endl;
+    
 }
 
 void Player::Move(glm::vec3 direction, float deltaTime)
@@ -28,7 +29,8 @@ void Player::Move(glm::vec3 direction, float deltaTime)
     static float angle;
     static float counter = waitTime;
 
-    
+    if (angle == 0)
+        angle = 360;
     if(canMove)
     {
         if (glm::length(direction) > 0.0f) {
@@ -45,11 +47,13 @@ void Player::Move(glm::vec3 direction, float deltaTime)
 
         this->Position = desiredPosition;
         this->Rotation.y = angle;
+       
         //this->SetRotation( glm::vec3(this->Rotation.x, this->Rotation.y, this->Rotation.z)); // PER MODELLI 3D SI FA ATTORNO AD ASSE Y! QUINDI ORA IN GAMEOBJECT QUESTE ROTAZIONI LE APPLICO AD ASSE Y
         Player::collision();
     }
     else
     {
+        this->Rotation.y +=    sin(Time::currentTime* M_PI *2) / 2;
         //disiabilita il movimento del player per un breve periodo per poi riabilitarlo
         counter -= Time::deltaTime;
         if (counter <= 0)
