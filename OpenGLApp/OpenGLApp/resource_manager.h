@@ -40,7 +40,7 @@ public:
 
     static void Clear();
     
-    static void saveHighScore(int score);
+    static int saveHighScore(int score);
 private:
 
     ResourceManager() { }

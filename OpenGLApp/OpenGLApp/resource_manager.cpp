@@ -164,7 +164,7 @@ void ResourceManager::LoadAssets()
    
 }
 
-void ResourceManager::saveHighScore(int score)
+int ResourceManager::saveHighScore(int score)
 {
     int cmp = 0;
     std::ifstream fileCont("saved_value.txt");
@@ -179,8 +179,10 @@ void ResourceManager::saveHighScore(int score)
                 //fileDest << 0;  // Scrive la variabile intera nel file
                 fileDest.close();
             }
+            return cmp;
         }else {
             std::cerr << "Impossibile aprire il file per il caricamento!" << std::endl;
+            return -1;
         }
 }
 

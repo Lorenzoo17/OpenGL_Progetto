@@ -57,7 +57,7 @@ void Customer::CustomerWait() {
             if(patienceTime <= 0.0f)
             {
                 this->game->isGameOver = true; //Game Over
-                ResourceManager::saveHighScore(this->game->game_score);
+                
             }
         }else
         {
