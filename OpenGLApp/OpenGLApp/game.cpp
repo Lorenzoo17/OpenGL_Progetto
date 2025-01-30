@@ -146,7 +146,12 @@ void Game::Render() {
         //std::stringstream ss; ss << this->CustomerManager->customers_list.size();
         //Text->RenderText("Customers:" + ss.str(), 5.0f, 1.0f, 1.7f);
         std::stringstream ss; ss << game_score;
-        //Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
+        Text->RenderText("Score:" + ss.str(), 5.0f, 2.0f, 1.7f);
+
+        // Text rendere del water level
+        std::stringstream swater; 
+        swater << player->getWaterLevel();
+        Text->RenderText("Water:" + swater.str(), 600.0f, 2.0f, 1.7f);
     }
     else { // Se si e' nel menu
         UpdateRenderData(); // aggiorno i dati di rendering da passare ai gameobject per il rendering
@@ -155,7 +160,7 @@ void Game::Render() {
 
         Text->RenderText("WC CLEANER", Width / 3, Height / 20, 2.0f, glm::vec3(0.7f, 0.2f, 0.2f));
 
-        Text->RenderText("PREMI INVIO PER GIOCARE", Width / 3, 400.0f, 1.0f);
+        Text->RenderText("PREMI INVIO O IL BOTTONE PER GIOCARE", Width / 4, 350.0f, 1.0f);
     }
 }
 
@@ -189,9 +194,12 @@ void Game::Update() {
             if (this->Keys[GLFW_KEY_ENTER]) {
                 isInMenu = false; // Esce dal menu
             }
-
-            if (Utilities::clickOverObject(startButton->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 200.0f)) {
+            glm::vec3 button_offset = glm::vec3(startButton->Position.x, startButton->Position.y + 2.0f, 0.0f);
+            if (Utilities::clickOverObject(button_offset, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 100.0f)) {
                 startButton->Color = glm::vec3(0.2f, 0.8f, 0.2f);
+                if (mouseLeftClick) {
+                    isInMenu = false;
+                }
             }
             else {
                 startButton->Color = glm::vec3(0.2f, 0.2f, 0.2f);
@@ -224,10 +232,14 @@ void Game::ProcessInput() {
     }
     interactPressed = this->Keys[GLFW_KEY_E];
 
-    if (mouseLeftClick) {
-        if (Utilities::clickOverObject(this->Level->Mocio->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 50.0f)) {
+    if (Utilities::clickOverObject(this->Level->Mocio->Position, mousePosition, camera->GetViewMatrix(), projection, Width, Height, 50.0f)) {
+        if (mouseLeftClick) {
             player->waterRefill();
         }
+        this->Level->Mocio->Color = glm::vec3(0.2f, 1.0f, 0.2f);
+    }
+    else {
+        this->Level->Mocio->Color = glm::vec3(1.0f, 1.0f, 1.0f);
     }
 }
 

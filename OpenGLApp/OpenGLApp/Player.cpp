@@ -90,7 +90,9 @@ void Player::collision() {
     }
 }
 
-
+int Player::getWaterLevel() {
+    return this->WaterLevel;
+}
 
 void Player::CleanWc(Wc* wc, bool interactPressed) {
     if (Utilities::CheckDistance(this->Position, wc->wcObject.Position, 1.2f)) {
